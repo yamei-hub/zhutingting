@@ -1,0 +1,72 @@
+{
+  "id": "5231912",
+  "name": "项目1",
+  "font_family": "iconfont",
+  "css_prefix_text": "icon-",
+  "description": "",
+  "glyphs": [
+    {
+      "icon_id": "48404044",
+      "name": "安全认证",
+      "font_class": "anquanrenzheng",
+      "unicode": "10239",
+      "unicode_decimal": 66105
+    },
+    {
+      "icon_id": "48404045",
+      "name": "编辑",
+      "font_class": "bianji",
+      "unicode": "1023a",
+      "unicode_decimal": 66106
+    },
+    {
+      "icon_id": "48404048",
+      "name": "点踩",
+      "font_class": "diancai",
+      "unicode": "1023b",
+      "unicode_decimal": 66107
+    },
+    {
+      "icon_id": "48404049",
+      "name": "点赞",
+      "font_class": "dianzan",
+      "unicode": "1023c",
+      "unicode_decimal": 66108
+    },
+    {
+      "icon_id": "48088672",
+      "name": "保存",
+      "font_class": "baocun",
+      "unicode": "e6d8",
+      "unicode_decimal": 59096
+    },
+    {
+      "icon_id": "48088673",
+      "name": "搜索",
+      "font_class": "sousuo",
+      "unicode": "e6d9",
+      "unicode_decimal": 59097
+    },
+    {
+      "icon_id": "48091538",
+      "name": "打印",
+      "font_class": "dayin",
+      "unicode": "e6db",
+      "unicode_decimal": 59099
+    },
+    {
+      "icon_id": "48091539",
+      "name": "全选",
+      "font_class": "quanxuan",
+      "unicode": "e6dc",
+      "unicode_decimal": 59100
+    },
+    {
+      "icon_id": "48092126",
+      "name": "删除",
+      "font_class": "shanchu",
+      "unicode": "e6dd",
+      "unicode_decimal": 59101
+    }
+  ]
+}
