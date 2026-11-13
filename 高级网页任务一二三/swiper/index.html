@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<link rel="icon" href="data:,">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Swiper 课堂实践目录 · 朱婷婷</title>
+<!-- 作者：朱婷婷（24002120525）
+     Swiper 模块导航：基础演示台 + 任务一/二/三独立页 + AI 对话记录。类名 / 变量统一 ztt 前缀。 -->
+<style>
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{font-family:"Microsoft YaHei","PingFang SC",system-ui,sans-serif;background:#f6f8fc;color:#1f2937}
+  .ztt-wrap{max-width:1000px;margin:0 auto;padding:36px 20px 60px}
+
+  .ztt-nav{display:flex;flex-wrap:wrap;align-items:center;gap:10px;margin-bottom:18px}
+  .ztt-nav a{display:inline-block;text-decoration:none;color:#0f2b5b;font-size:14px;font-weight:bold;background:#fff;border:1px solid #dbe4ff;border-radius:999px;padding:9px 22px}
+  .ztt-nav a:hover{box-shadow:0 8px 18px rgba(15,43,91,.15)}
+
+  .ztt-head{background:linear-gradient(135deg,#0f2b5b,#1d5bbf);border-radius:20px;padding:36px 38px;color:#fff;margin-bottom:26px;box-shadow:0 12px 30px rgba(15,43,91,.3)}
+  .ztt-head .ztt-badge{display:inline-block;padding:5px 14px;border-radius:999px;background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.3);font-size:13px;letter-spacing:2px;margin-bottom:14px}
+  .ztt-head h1{font-size:30px;letter-spacing:1px;line-height:1.4}
+  .ztt-head h1 b{color:#ffd166}
+  .ztt-head p{margin-top:12px;font-size:14.5px;color:#d9e3f5;line-height:2}
+
+  .ztt-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:18px}
+  @media (max-width:760px){.ztt-grid{grid-template-columns:1fr}}
+  .ztt-card{display:flex;flex-direction:column;gap:8px;text-decoration:none;background:#fff;border:1px solid #e8ecf5;border-radius:18px;padding:24px 26px;box-shadow:0 4px 14px rgba(31,41,55,.06);transition:transform .2s,box-shadow .2s;position:relative;overflow:hidden}
+  .ztt-card:hover{transform:translateY(-4px);box-shadow:0 12px 26px rgba(15,43,91,.14)}
+  .ztt-card .ztt-no{font-size:13px;font-weight:bold;color:#e8890c;letter-spacing:1px}
+  .ztt-card h3{font-size:18px;color:#111827}
+  .ztt-card p{font-size:13.5px;color:#6b7280;line-height:1.8}
+  .ztt-card .ztt-go{margin-top:10px;font-size:13.5px;font-weight:bold;color:#0f2b5b}
+  .ztt-card.ztt-wide{grid-column:1 / -1;flex-direction:row;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:14px}
+  .ztt-card.ztt-orange{border-color:#f5a623;background:linear-gradient(135deg,#fff7ec,#fff)}
+
+  footer{text-align:center;margin-top:34px;color:#9ca3af;font-size:13px;line-height:2}
+</style>
+</head>
+<body>
+<div class="ztt-wrap">
+
+  <div class="ztt-nav">
+    <a href="../index.html">← 返回课堂实践目录</a>
+  </div>
+
+  <div class="ztt-head">
+    <span class="ztt-badge">SWIPER 模 块 · 大 国 重 器 光 影 展</span>
+    <h1>Swiper 轮播组件 · <b>课堂实践目录</b></h1>
+    <p>基础演示台（演示一~四）与三个评分任务分别独立成页；下方卡片按任务一 → 任务二 → 任务三的顺序进入，AI 对话记录单独留了访问入口。</p>
+  </div>
+
+  <div class="ztt-grid">
+    <a class="ztt-card" href="swiper-task.html">
+      <span class="ztt-no">演示台 / DEMO</span>
+      <h3>基础演示一~四</h3>
+      <p>最小可拖动轮播、圆点 + 箭头、自动翻页、七种效果实时切换（含 creative 电影墙）。</p>
+      <span class="ztt-go">打开演示台 →</span>
+    </a>
+    <a class="ztt-card ztt-orange" href="提示词.html">
+      <span class="ztt-no">AI 记录 / PROMPT LOG</span>
+      <h3>我与 AI 的关键对话记录</h3>
+      <p>三个任务的提示词原文、重要往返、AI 出错点与订正过程，附答辩要点。</p>
+      <span class="ztt-go">打开对话记录 →</span>
+    </a>
+    <a class="ztt-card" href="task1.html">
+      <span class="ztt-no">任务一 / 提示词工程师</span>
+      <h3>两轮提示词对照</h3>
+      <p>同一句需求两种翻译：漏 clickable 的不可点 vs 补齐后圆点可跳转，含真实点击读数与需求对照表。</p>
+      <span class="ztt-go">打开任务一 →</span>
+    </a>
+    <a class="ztt-card" href="task2.html">
+      <span class="ztt-no">任务二 / creative 仿写</span>
+      <h3>creative 电影选片墙</h3>
+      <p>课堂没讲的第 7 种 effect，prev / next 自定义变换逐条拆解，百分号与角度答辩要点。</p>
+      <span class="ztt-go">打开任务二 →</span>
+    </a>
+    <a class="ztt-card" href="task3.html">
+      <span class="ztt-no">任务三 / 综合创作</span>
+      <h3>魔都号 + 联动封面流</h3>
+      <p>第六件展品爱达·魔都号，thumbs 缩略图双向联动，主图 coverflow 大角度旋转堆叠。</p>
+      <span class="ztt-go">打开任务三 →</span>
+    </a>
+  </div>
+
+  <footer>Swiper 课堂实践目录 · 大国重器光影展 · 高级网页设计 · 朱婷婷（24002120525） · 2026-2027-1</footer>
+</div>
+</body>
+</html>

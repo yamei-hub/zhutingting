@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<link rel="icon" href="data:,">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI 对话记录 · Swiper 进阶三任务 · 朱婷婷</title>
+<!-- 作者：朱婷婷（24002120525）
+     说明：本页是 Swiper 进阶作业三个任务的"与 AI 关键对话记录"访问入口：
+     任务一 提示词工程师（2 轮迭代提示词 + AI 回答 + 验证结论）
+     任务二 creative 仿写（AI 教读 creativeEffect + 答辩追问）
+     任务三 综合创作（第六件作品爱达·魔都号 + thumbs 联动 + coverflow 大角度旋转 + 答辩四连 + 2026-11-11 四项课堂外能力）
+     记录规则见 AGENTS.md「AI 对话记录维护」；新增对话用 .ztt-chat 结构，保留提示词原文。
+     页面类名统一 ztt_ 前缀 -->
+<link rel="stylesheet" href="swiper/swiper-bundle.min.css">
+<style>
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{font-family:"Microsoft YaHei","PingFang SC",system-ui,sans-serif;background:#f6f8fc;color:#1f2937}
+  .ztt-wrap{max-width:920px;margin:0 auto;padding:40px 20px 60px}
+
+  /* 头部 */
+  .ztt-head{background:linear-gradient(135deg,#0f2b5b,#1d5bbf);border-radius:20px;padding:34px 38px;color:#fff;margin-bottom:26px;box-shadow:0 12px 30px rgba(15,43,91,.3)}
+  .ztt-head .ztt-badge{display:inline-block;padding:5px 14px;border-radius:999px;background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.3);font-size:13px;letter-spacing:2px;margin-bottom:14px}
+  .ztt-head h1{font-size:27px;letter-spacing:1px;line-height:1.5}
+  .ztt-head h1 b{color:#ffd166}
+  .ztt-head p{margin-top:12px;font-size:14.5px;color:#d9e3f5;line-height:2}
+
+  /* 章节卡 */
+  .ztt-sec{background:#fff;border-radius:18px;padding:26px 30px;margin-bottom:26px;border:1px solid #e8ecf5;box-shadow:0 4px 14px rgba(31,41,55,.06);position:relative;overflow:hidden}
+  .ztt-sec::before{content:"";position:absolute;left:0;top:0;bottom:0;width:5px;background:linear-gradient(#0f2b5b,#1d5bbf)}
+  .ztt-sec-head{display:flex;align-items:center;gap:14px;margin-bottom:8px}
+  .ztt-sec-head .ztt-no{flex:none;width:42px;height:42px;border-radius:12px;background:linear-gradient(135deg,#0f2b5b,#1d5bbf);color:#fff;font-size:19px;font-weight:bold;display:flex;align-items:center;justify-content:center}
+  .ztt-sec-head h2{font-size:20px;color:#111827}
+  .ztt-sec-head small{display:block;font-weight:normal;color:#9ca3af;font-size:13px;margin-top:3px}
+  .ztt-sec p.ztt-txt{font-size:14.5px;color:#374151;line-height:2;margin:8px 0}
+  .ztt-sec p.ztt-txt b{color:#0f2b5b}
+  .ztt-sec code{background:#eef2ff;color:#1d4ed8;padding:1px 7px;border-radius:5px;font-family:Consolas,monospace;font-size:13px}
+
+  /* 对话气泡 */
+  .ztt-chat{margin:16px 0}
+  .ztt-msg{display:flex;flex-direction:column;margin-bottom:16px}
+  .ztt-msg.ztt-me{align-items:flex-end}
+  .ztt-msg .ztt-role{font-size:12px;color:#9ca3af;margin:0 12px 6px}
+  .ztt-msg .ztt-bubble{max-width:86%;padding:14px 18px;border-radius:14px;font-size:14px;line-height:2}
+  .ztt-msg.ztt-me .ztt-bubble{background:#e8f0ff;border:1px solid #c7d8f8;color:#0f2b5b;border-top-right-radius:4px}
+  .ztt-msg.ztt-ai .ztt-bubble{background:#f3f4f6;border:1px solid #e5e7eb;color:#1f2937;border-top-left-radius:4px}
+  .ztt-msg .ztt-bubble pre{background:#0f172a;color:#e2e8f0;padding:14px 16px;border-radius:10px;overflow-x:auto;font-family:Consolas,"Courier New",monospace;font-size:13px;line-height:1.8;margin:10px 0;white-space:pre}
+  .ztt-msg .ztt-bubble code{background:#0f2b5b;color:#fff;padding:1px 7px;border-radius:5px;font-family:Consolas,monospace;font-size:13px}
+  .ztt-msg.ztt-me .ztt-bubble code{background:rgba(15,43,91,.15)}
+  .ztt-msg .ztt-bubble b{color:#b45309}
+
+  /* 验证结论块 */
+  .ztt-verify{background:#f0fdf4;border:1.5px dashed #16a34a;border-radius:12px;padding:14px 18px;margin:12px 0 4px;font-size:13.5px;color:#166534;line-height:2}
+  .ztt-verify h3{font-size:14.5px;color:#15803d;margin-bottom:6px}
+  .ztt-verify b{color:#b45309}
+  .ztt-verify .ztt-bad{color:#dc2626}
+  .ztt-verify .ztt-good{color:#15803d}
+
+  /* 答辩预答块 */
+  .ztt-defense{background:#fffbea;border:1px solid #fde68a;border-radius:12px;padding:14px 18px;margin:12px 0 4px;font-size:13.5px;color:#7c5e10;line-height:2.1}
+  .ztt-defense h3{font-size:14.5px;color:#b45309;margin-bottom:6px}
+  .ztt-defense b{color:#b45309}
+
+  .ztt-back{text-align:center;margin-top:28px}
+  .ztt-back a{display:inline-block;text-decoration:none;color:#0f2b5b;font-size:14.5px;font-weight:bold;background:#fff;border:1px solid #dbe4ff;border-radius:999px;padding:10px 26px;transition:transform .2s,box-shadow .2s}
+  .ztt-back a:hover{transform:translateY(-2px);box-shadow:0 8px 18px rgba(15,43,91,.15)}
+
+  footer{text-align:center;margin-top:34px;color:#9ca3af;font-size:13px;line-height:2}
+</style>
+</head>
+<body>
+<div class="ztt-wrap">
+
+  <div class="ztt-head">
+    <span class="ztt-badge">A I 对 话 记 录 · 提 示 词 访 问 入 口</span>
+    <h1>Swiper 进阶三任务 · <b>我与 AI 的关键对话</b></h1>
+    <p>任务一：让 AI 听懂需求（提示词迭代 2 轮 + 验证）；任务二：AI 教我读懂 creative 自定义变换；任务三：第六件作品爱达·魔都号 + thumbs 缩略图联动 + coverflow 大角度旋转封面流。<br>
+    作者：朱婷婷（24002120525） · 以下记录按对话实际顺序整理，每轮均已在页面上实操验证。</p>
+  </div>
+
+  <!-- ═══════════ 任务一 ═══════════ -->
+  <div class="ztt-sec">
+    <div class="ztt-sec-head">
+      <span class="ztt-no">1</span>
+      <h2>任务一 · 提示词工程师<small>不写代码写提示词：让 AI 生成 #wySw4 的配置（2 轮迭代）</small></h2>
+    </div>
+
+    <p class="ztt-txt"><b>目标需求：</b>① 无缝循环 ② 3.2 秒自动翻页、手动操作后不停止 ③ 圆点分页器可点击 ④ 初始效果为 cube。</p>
+
+    <h3 style="font-size:15.5px;color:#0f2b5b;margin:14px 0 4px">🔁 第 1 轮提示词（初版）</h3>
+    <div class="ztt-chat">
+      <div class="ztt-msg ztt-me">
+        <span class="ztt-role">我（提示词 1）</span>
+        <div class="ztt-bubble">帮我用 Swiper 写一个轮播初始化配置：<code>new Swiper('#wySw4', {...})</code>，要求能自动播放，每 3.2 秒翻一页，带圆点分页器，初始切换效果是 cube。</div>
+      </div>
+      <div class="ztt-msg ztt-ai">
+        <span class="ztt-role">AI（回答 1）</span>
+        <div class="ztt-bubble">好的，配置如下：
+<pre>new Swiper('#wySw4', {
+  autoplay: { delay: 3200 },
+  pagination: { el: '#wyPag4' },
+  effect: 'cube',
+  cubeEffect: { shadow: true, slideShadows: true }
+});</pre>
+每 3200 毫秒自动切换一张，圆点分页器挂在 #wyPag4 容器上，效果为 3D 立方体。</div>
+      </div>
+    </div>
+
+    <div class="ztt-verify">
+      <h3>🧪 第 1 轮验证（逐条实测）</h3>
+      ① 3.2 秒自动翻页 —— <span class="ztt-good">✅ 通过</span>，计时正常；<br>
+      ② 手动拖一下再松手 —— <span class="ztt-bad">❌ 不通过</span>：轮播<b>再也不自己翻了</b>（Swiper 的 autoplay 默认 disableOnInteraction 为 true，用户一操作就停止，AI 没加这个参数）；<br>
+      ③ 点圆点 —— <span class="ztt-bad">❌ 不通过</span>：圆点点了没反应（缺 clickable: true，默认只显示不可点）；<br>
+      ④ 拖到最后一张 —— <span class="ztt-bad">❌ 不通过</span>：直接"顶死"回不去（缺 loop: true，没有无缝循环）；<br>
+      ⑤ cube 效果 —— <span class="ztt-good">✅ 通过</span>。<br>
+      <b>一句话结论：</b>AI 第一次只实现了我字面上说的 3 条，漏了 3 条体验类需求——控制台<b>不报任何错</b>，只能靠动手验证发现。
+    </div>
+
+    <h3 style="font-size:15.5px;color:#0f2b5b;margin:14px 0 4px">🔁 第 2 轮提示词（针对漏项说清楚）</h3>
+    <div class="ztt-chat">
+      <div class="ztt-msg ztt-me">
+        <span class="ztt-role">我（提示词 2）</span>
+        <div class="ztt-bubble">刚才的配置实测有 3 个问题，请补全后给完整版：<br>
+        ① 我要<b>无缝循环</b>：翻到最后一张继续往后翻，要能回到第一张，请加 <code>loop: true</code>；<br>
+        ② 用户<b>手动拖动、点圆点之后自动播放不能停止</b>，要在 autoplay 里加 <code>disableOnInteraction: false</code>；<br>
+        ③ 圆点要<b>能点击直接跳到对应那一张</b>，pagination 里加 <code>clickable: true</code>。<br>
+        其它（3.2 秒、cube）保持不变。</div>
+      </div>
+      <div class="ztt-msg ztt-ai">
+        <span class="ztt-role">AI（回答 2）</span>
+        <div class="ztt-bubble">理解，完整配置如下：
+<pre>new Swiper('#wySw4', {
+  loop: true,
+  autoplay: {
+    delay: 3200,
+    disableOnInteraction: false
+  },
+  pagination: {
+    el: '#wyPag4',
+    clickable: true
+  },
+  effect: 'cube',
+  cubeEffect: { shadow: true, slideShadows: true }
+});</pre>
+loop 负责首尾无缝衔接；disableOnInteraction: false 表示用户交互后自动播放继续；clickable: true 让每个圆点可点击跳转到对应 slide。</div>
+      </div>
+    </div>
+
+    <div class="ztt-verify">
+      <h3>🧪 第 2 轮验证</h3>
+      拖动松手后 3.2 秒内恢复自动翻页 <span class="ztt-good">✅</span>；点圆点直接跳转 <span class="ztt-good">✅</span>；最后一张继续往后翻无缝回到第一张 <span class="ztt-good">✅</span>；cube 正常 <span class="ztt-good">✅</span>。<br>
+      <b>一句话结论：</b>4 条需求全部实测通过，配置已用在演示四里（初始效果就是 cube，点其它按钮可换效果）。
+    </div>
+
+    <div class="ztt-defense">
+      <h3>🎤 答辩抽问 · 预答</h3>
+      <b>Q：第一版提示词漏掉了哪个需求？</b><br>
+      A：漏了无缝循环、手动操作后不停止、圆点可点击这 3 条。因为我第一版只写了"自动播放、带圆点、cube 效果"这几个词，没有把"体验行为"翻译成参数，AI 就按字面只给了 3 条配置。<br>
+      <b>Q：第二轮是怎么说清楚的？</b><br>
+      A：把每条需求写成"Swiper 参数名 + 取值 + 触发条件"的形式，例如"手动拖动之后自动播放不能停止 → disableOnInteraction: false"，而不是说"要好用一点"这种模糊形容词；并且逐条编号，让 AI 无法合并遗漏。<br>
+      <b>Q：AI 第一次给的代码错在哪？</b><br>
+      A：不是语法错，是<b>配置缺项</b>：autoplay 默认交互即停、pagination 默认不可点、没有 loop。这类错误不报错、不崩溃，页面"看起来能用"，必须逐条实测才能暴露。
+    </div>
+  </div>
+
+  <!-- ═══════════ 任务二 ═══════════ -->
+  <div class="ztt-sec">
+    <div class="ztt-sec-head">
+      <span class="ztt-no">2</span>
+      <h2>任务二 · creative 仿写<small>课堂没讲的第 7 种 effect，让 AI 教我读懂官方 demo（257-effect-creative）</small></h2>
+    </div>
+
+    <p class="ztt-txt">打开官方示例 <code>swiper/demo/257-effect-creative.html</code> 后，<code>creativeEffect</code> 里的 <code>prev / next</code> transform 写法看不懂，请 AI 讲解，并仿写"电影选片墙"效果，加到演示四的第 7 个按钮上。</p>
+
+    <h3 style="font-size:15.5px;color:#0f2b5b;margin:14px 0 4px">💬 关键对话</h3>
+    <div class="ztt-chat">
+      <div class="ztt-msg ztt-me">
+        <span class="ztt-role">我（提示词）</span>
+        <div class="ztt-bubble">Swiper 有第 7 种 effect：creative。我看了官方 demo 257-effect-creative.html，里面 <code>creativeEffect: { prev: { translate: [...], rotate: [...] }, next: {...} }</code> 这种写法看不懂。我要做一个"电影选片墙"：<b>上一张缩小左移并带一点角度，下一张放大右移</b>，像站在电影海报墙前选片。请给我一版配置，并用大白话解释：prev 和 next 的 transform 各控制什么？translate 里的百分比相对谁？</div>
+      </div>
+      <div class="ztt-msg ztt-ai">
+        <span class="ztt-role">AI（回答）</span>
+        <div class="ztt-bubble">creativeEffect 是"自定义变换"效果：Swiper 会给每张 slide 算一个进度值（-1 ~ 1，表示它相对当前激活张的位置），然后把 prev / next 里定义的变换在这个进度上做插值。<br><br>
+        <b>prev 控制"正在退场的上一张"去哪儿</b>——它离开中心后停在什么位置、什么角度；<b>next 控制"即将进场的下一张"从哪儿来</b>——进场前躲在哪个位置。<br><br>
+        <b>translate 的百分号相对该 slide 自身的尺寸</b>（水平分量相对 slide 自己的宽度，垂直分量相对自己的高度），不是相对整个轮播容器；第三个数字是 Z 轴的像素值，负值是往屏幕里退（变小变远）、正值是往屏幕外迎（变大变近）。rotate 的第三个值是 2D 旋转角，单位是度；scale 是相对自身尺寸的缩放倍率。<br><br>
+        电影选片墙配置参考：
+<pre>creativeEffect: {
+  limitProgress: 1,
+  shadowPerProgress: true,
+  prev: {
+    translate: ['-85%', 0, -320],  // 左移 85%（相对自身宽）、向内退 320px
+    rotate: [0, 0, -12],           // 左倾 12 度
+    scale: 0.7,                   // 缩小到 70%
+    opacity: 0.55,
+    shadow: true                  // 开启投影，shadowPerProgress 才生效
+  },
+  next: {
+    translate: ['85%', 0, 320],    // 从右侧 85% 进场、从外向内迎
+    rotate: [0, 0, 12],            // 右倾 12 度
+    scale: 1.05,                  // 放大到 1.05 倍
+    opacity: 0.55,
+    shadow: true                  // 同上，两侧对称投影
+  }
+}</pre>
+        注意 effect 要同时设为 <code>'creative'</code> 才会生效。</div>
+      </div>
+      <div class="ztt-msg ztt-me">
+        <span class="ztt-role">我（追问验证）</span>
+        <div class="ztt-bubble">我照这版配置加到了页面的第 7 个按钮上，实测有效。再追问：如果我想让卡片<b>转 20 度</b>，改哪个数值？</div>
+      </div>
+      <div class="ztt-msg ztt-ai">
+        <span class="ztt-role">AI（回答）</span>
+        <div class="ztt-bubble">改 rotate 的第三个值即可：prev 的 <code>rotate: [0, 0, -20]</code>、next 的 <code>rotate: [0, 0, 20]</code>（一左一右对称）。改完刷新，两侧的海报倾角立刻变陡。</div>
+      </div>
+    </div>
+
+    <h3 style="font-size:15.5px;color:#0f2b5b;margin:14px 0 4px">💬 追问 2：transform 和 translate 到底各管什么（2026-11-11）</h3>
+    <div class="ztt-chat">
+      <div class="ztt-msg ztt-me">
+        <span class="ztt-role">我（提示词）</span>
+        <div class="ztt-bubble">再解释一下你回答里 <b>transform 和 translate</b> 的具体含义：transform 和 translate 是什么关系？translate 的三个值分别是什么、百分比相对谁？第三个数字为什么是负的？rotate 数组三个值又分别代表什么？</div>
+      </div>
+      <div class="ztt-msg ztt-ai">
+        <span class="ztt-role">AI（回答）</span>
+        <div class="ztt-bubble"><b>transform 是 CSS 变换属性的总入口</b>，translate / rotate / scale 都是它的变换函数；creativeEffect 里的 prev / next 只是把这些函数写成 JS 配置，Swiper 按 slide 进度（-1 ~ 1）插值后再写进元素的 transform。<br><br>
+        <b>translate 三个值 = X / Y / Z 位移：</b>X 的百分比相对 slide <b>自身宽度</b>，Y 的百分比相对自身高度，和轮播容器无关；第三个值是 Z 轴像素，<b>负值往屏幕里退（变小变远），正值往屏幕外迎（变大变近）</b>——所以 prev 用 -320 退场、next 用 +320 进场。<br><br>
+        <b>rotate 数组 = [X 轴, Y 轴, Z 轴]：</b>第三个值才是平面 2D 旋转角（度），负值逆时针、正值顺时针；scale 是相对自身的缩放倍率；opacity 不属于 transform，是独立属性。</div>
+      </div>
+    </div>
+
+    <div class="ztt-verify">
+      <h3>🧪 验证</h3>
+      点击第 7 个按钮「creative 电影墙」<span class="ztt-good">✅ 通过</span>：上一张缩小左移左倾、下一张从右侧放大迎进，拖动时插值过渡自然，就是"选片墙"的感觉；把 rotate 改成 20 后两侧卡片倾角明显变大 <span class="ztt-good">✅</span>。<br>
+      <b>一句话结论：</b>creative 效果 = 我自己定义"上一张的去向"和"下一张的来路"，Swiper 负责按进度插值。
+    </div>
+
+    <div class="ztt-defense">
+      <h3>🎤 答辩抽问 · 预答</h3>
+      <b>Q：transform 里的百分号是相对谁的？</b><br>
+      A：相对每个 slide <b>自身</b>的尺寸——水平分量相对 slide 自己的宽度，垂直分量相对自己的高度；和容器无关，所以每张图的位移量是"按自己的宽度打八五折"这样算的。<br>
+      <b>Q：改一个数值让卡片转 20 度？</b><br>
+      A：rotate 数组第三个值就是 2D 旋转角（度），把 ±12 改成 ±20 即可，已在页面试过（演示四 → creative 按钮对应的源码注释里也写明了）。
+    </div>
+  </div>
+
+  <!-- ═══════════ 任务三 ═══════════ -->
+  <div class="ztt-sec">
+    <div class="ztt-sec-head">
+      <span class="ztt-no">3</span>
+      <h2>任务三 · 综合创作 + 技术答辩<small>第六件作品爱达·魔都号（AI 生图）+ thumbs 缩略图联动 + coverflow 大角度旋转</small></h2>
+    </div>
+
+    <p class="ztt-txt">① 为光影展添加第六件作品<b>爱达·魔都号</b>（首艘国产大型邮轮，2024 年 1 月 1 日从上海吴淞口国际邮轮港开启商业首航），图片由 AI 生成（横版 16:9，文件 <code>swiper-imgs/adora_1.jpg</code>），各轮播的 slide 结构都补齐；② 主图与下方缩略图做 <b>thumbs 双向联动</b>，主图用 <b>coverflow 封面流</b>：<code>centeredSlides: true</code> 当前张居中、两侧露卡，<code>coverflowEffect.rotate: 55</code> 两侧卡片各转 55°、<code>depth: 260</code> 做出前后纵深，旋转堆叠最直观；附加能力 <b>keyboard 键盘 / mousewheel 滚轮 / zoom 双击缩放 / parallax 视差</b> 四项全部加在任务三主图上（课堂只讲了 6 种 effect 与基础配置，这四项均属课外扩展）。</p>
+
+    <h3 style="font-size:15.5px;color:#0f2b5b;margin:14px 0 4px">💬 关键对话 1：新增第六件作品</h3>
+    <div class="ztt-chat">
+      <div class="ztt-msg ztt-me">
+        <span class="ztt-role">我（提示词）</span>
+        <div class="ztt-bubble">我的光影展页面用的是本地引入的 Swiper 11（script 引 swiper-bundle.min.js）。我要给 4 个轮播各加第 6 张 slide：作品名"爱达·魔都号"，设定是 2024 年 1 月首航的国产大型邮轮，图片是 AI 生成的 <code>adora_1.jpg</code>（16:9 横版）。给我一段和现有 slide 结构一致（swiper-slide + img + ztt-cap 标题说明）的 HTML。</div>
+      </div>
+      <div class="ztt-msg ztt-ai">
+        <span class="ztt-role">AI（回答 1 —— 有瑕疵）</span>
+        <div class="ztt-bubble">结构如下，图片路径按你页面的相对目录写：
+<pre>&lt;div class="swiper-slide"&gt;
+  &lt;img src="swiper-imgs/adora_1.jpg" alt="爱达·魔都船"&gt;
+  &lt;div class="ztt-cap"&gt;
+    &lt;h3&gt;爱达·魔都船&lt;/h3&gt;
+    &lt;p&gt;2024 年 1 月首航 · 国产大型邮轮扬帆起航&lt;/p&gt;
+  &lt;/div&gt;
+&lt;/div&gt;</pre>
+注意 4 个轮播的说明文字可以各写各的，但 img 路径和类名结构要保持一致，圆点分页器会自动多出一个点，不需要改 JS。</div>
+      </div>
+      <div class="ztt-msg ztt-me">
+        <span class="ztt-role">我（订正）</span>
+        <div class="ztt-bubble">标题写错了：正式名称是<b>爱达·魔都号</b>，不是"魔都船"；配图初稿还是外链占位图，已换成本地 AI 生成的 <code>adora_1.jpg</code>。订正后四个轮播都用同一段结构。</div>
+      </div>
+    </div>
+    <div class="ztt-verify">🧪 <b>验证：</b>复制进 4 个轮播刷新后，每个轮播圆点变成 6 个，第 6 张图正常显示 <span class="ztt-good">✅ 通过</span>（图片由 AI 生成，16:9 横版，本地加载无外链依赖）。</div>
+
+    <h3 style="font-size:15.5px;color:#0f2b5b;margin:14px 0 4px">💬 关键对话 2：keyboard 键盘控制（AI 第一次答错了）</h3>
+    <div class="ztt-chat">
+      <div class="ztt-msg ztt-me">
+        <span class="ztt-role">我（提示词）</span>
+        <div class="ztt-bubble">我要给演示四的 #wySw4 加键盘控制：按 ← → 键能翻页。要求页面滚动到其它区域时按键<b>不要</b>误触发轮播。给我 keyboard 配置并解释参数。</div>
+      </div>
+      <div class="ztt-msg ztt-ai">
+        <span class="ztt-role">AI（回答 1 —— 有错）</span>
+        <div class="ztt-bubble">用 Keyboard 模块：
+<pre>import Swiper from 'swiper';
+import { Keyboard } from 'swiper/modules';
+
+new Swiper('#wySw4', {
+  modules: [Keyboard],
+  keyboard: { enabled: true }
+});</pre>
+enabled: true 开启方向键翻页。</div>
+      </div>
+      <div class="ztt-msg ztt-me">
+        <span class="ztt-role">我（追问 + 指错）</span>
+        <div class="ztt-bubble">报错了：我页面是 <code>&lt;script src="swiper-bundle.min.js"&gt;</code> 这种全量打包引入，没有用 npm / ES Module。第一版代码里 import 会直接报错吧？另外"滚动到别处不误触发"你还没解决。</div>
+      </div>
+      <div class="ztt-msg ztt-ai">
+        <span class="ztt-role">AI（回答 2 —— 修正）</span>
+        <div class="ztt-bubble">抱歉，我默认按 npm 工程的写法答了。你用的是 swiper-bundle 全量文件，<b>所有模块已经内置</b>，不需要 import、也不需要 modules 数组，直接写参数即可；"只在可视区域内响应"用 <code>onlyInViewport: true</code>：
+<pre>keyboard: {
+  enabled: true,        // 开启 ← → 翻页
+  onlyInViewport: true  // 轮播不在视口内时不响应按键
+}</pre>
+直接放进 new Swiper 的配置对象里就行。</div>
+      </div>
+    </div>
+
+    <div class="ztt-verify">🧪 <b>验证：</b>去掉 import / modules 后无报错；页面滚动到演示四可见时按 ← → 能翻页 <span class="ztt-good">✅</span>，滚到页面顶部时按方向键只滚动页面、轮播不动 <span class="ztt-good">✅</span>。<br><b>一句话结论：</b>bundle 全量版 = 模块全内置，只写 keyboard 参数；AI 第一版错在按 npm 按需引入的语境作答，没先确认我的引入方式。</div>
+
+    <h3 style="font-size:15.5px;color:#0f2b5b;margin:14px 0 4px">💬 关键对话 3：thumbs 缩略图联动（主图 ⇄ 缩略图双向同步）</h3>
+    <div class="ztt-chat">
+      <div class="ztt-msg ztt-me">
+        <span class="ztt-role">我（提示词）</span>
+        <div class="ztt-bubble">我想在页面上再做一个画廊：上面一张主图，下面一条缩略图。<b>点任意一张缩略图，主图立刻跟着跳；主图翻页时，对应缩略图自动点亮</b>。还是本地 <code>swiper-bundle.min.js</code> 全量引入。请给两个 Swiper 实例的配置，并说明两个实例的创建顺序。</div>
+      </div>
+      <div class="ztt-msg ztt-ai">
+        <span class="ztt-role">AI（回答 1 —— 有瑕疵）</span>
+        <div class="ztt-bubble">用 thumbs 模块：先 new 主图，再 new 缩略图，主图配置里写 <code>thumbs: { swiper: '#zttThumbs' }</code> 指向缩略图选择器；缩略图条配 <code>spaceBetween</code>、<code>slidesPerView: 'auto'</code>、<code>watchSlidesProgress: true</code>。激活的缩略图会自动加上 <code>swiper-slide-thumb-active</code> 类。</div>
+      </div>
+      <div class="ztt-msg ztt-me">
+        <span class="ztt-role">我（追问 + 指错）</span>
+        <div class="ztt-bubble">实测联动没生效：主图翻了缩略图不点亮，点缩略图主图也不跳。两个问题——<code>thumbs.swiper</code> 到底该传选择器字符串还是实例对象？创建顺序是不是反了？</div>
+      </div>
+      <div class="ztt-msg ztt-ai">
+        <span class="ztt-role">AI（回答 2 —— 修正）</span>
+        <div class="ztt-bubble">两处都要改：<br>
+        ① <b>先 new 缩略图实例，再 new 主图实例</b>——主图绑定 thumbs 时要拿到已经存在的缩略图实例，顺序反了绑定就是空的；<br>
+        ② <code>thumbs.swiper</code> 传的是<b>实例对象</b>，不是选择器字符串：
+<pre>var zttThumb = new Swiper('#zttThumbs', {
+  spaceBetween: 8,
+  slidesPerView: 'auto',
+  freeMode: true,
+  watchSlidesProgress: true,
+  slideToClickedSlide: true
+});
+var zttMain = new Swiper('#zttMain', {
+  effect: 'coverflow',
+  centeredSlides: true,
+  slidesPerView: 'auto',
+  spaceBetween: 24,
+  coverflowEffect: { rotate: 55, stretch: 0, depth: 260, modifier: 1, slideShadows: true },
+  navigation: { nextEl: '#zttMainNext', prevEl: '#zttMainPrev' },
+  thumbs: { swiper: zttThumb }
+});</pre>
+<code>slideToClickedSlide: true</code> 保证点哪张缩略图就把它带到可视区；点亮状态读 <code>.swiper-slide-thumb-active</code> 这个类所在的 slide 索引即可。</div>
+      </div>
+    </div>
+    <div class="ztt-verify">🧪 <b>验证：</b>点第 2 张缩略图，主图跳到第 2 张、缩略图同步点亮 <span class="ztt-good">✅</span>；点主图下一张，缩略图自动点亮到对应那张 <span class="ztt-good">✅</span>；读数显示"当前主图 / 点亮缩略图 / 已同步" <span class="ztt-good">✅</span>；主图两侧卡片以 55° 倾斜堆叠、纵深明显 <span class="ztt-good">✅</span>。<br><b>一句话结论：</b>thumbs 联动 = 两个独立实例用 <code>thumbs: { swiper: 实例 }</code> 绑在一起，顺序先缩略图后主图，传对象不传字符串；主图套 coverflow，<code>rotate: 55</code> + <code>depth: 260</code> 把旋转效果做明显。</div>
+
+    <h3 style="font-size:15.5px;color:#0f2b5b;margin:14px 0 4px">💬 关键对话 4：四项课堂外能力一次补齐（2026-11-11）</h3>
+    <div class="ztt-chat">
+      <div class="ztt-msg ztt-me">
+        <span class="ztt-role">我（提示词）</span>
+        <div class="ztt-bubble">任务三第二项还差一个"课堂没讲过的 Swiper 能力"。我不做单选，<b>keyboard、mousewheel、zoom、parallax 四项都补上</b>，全部加在主图 #zttMain 上。要求：键盘只在轮播可见时响应；滚轮到首尾后把页面滚动交还；双击放大要能还原；视差不能和缩放抢同一个 transform。请给完整配置并说明每一项的作用。</div>
+      </div>
+      <div class="ztt-msg ztt-ai">
+        <span class="ztt-role">AI（回答 1 —— 有瑕疵）</span>
+        <div class="ztt-bubble">四项都在 bundle 全量版里内置，写进主图配置即可：
+<pre>keyboard: { enabled: true, onlyInViewport: true },   // ← → 翻页，出视口不响应
+mousewheel: { enabled: true, releaseOnEdges: true }, // 滚轮翻页，到边交还页面
+zoom: { maxRatio: 3, minRatio: 1 },                  // 双击放大 / 还原
+parallax: true                                       // 开启 data-swiper-parallax</pre>
+视差与缩放分层写：视差 transform 放外层容器 <code>.ztt-parallax</code>（配 <code>data-swiper-parallax="-18%"</code>），缩放作用于内层 <code>img</code>；标题单独写 <code>data-swiper-parallax="-32%"</code>，两层速度不同才有纵深。</div>
+      </div>
+      <div class="ztt-msg ztt-me">
+        <span class="ztt-role">我（追问 + 指错）</span>
+        <div class="ztt-bubble">按第一版只写 <code>zoom: { maxRatio: 3 }</code>，双击完全没反应。是不是模块没开？另外 parallax 和 zoom 都改 transform，会不会互相覆盖？</div>
+      </div>
+      <div class="ztt-msg ztt-ai">
+        <span class="ztt-role">AI（回答 2 —— 修正）</span>
+        <div class="ztt-bubble">两处确认：① <b>zoom 必须显式写 <code>enabled: true</code></b>——bundle 里 zoom 模块默认关闭，只写 maxRatio 不会生效，补上后双击立即放大；② 只要视差和缩放不在同一个元素上就不会互相覆盖——外层 <code>.ztt-parallax</code> 写 translateX，内层 <code>img</code> 写 scale，两个 transform 同时存在、互不干扰。</div>
+      </div>
+    </div>
+    <div class="ztt-verify">🧪 <b>验证：</b>轮播在视口内按 ← → 能翻页、滚到页面顶部按键只滚动页面 <span class="ztt-good">✅</span>；鼠标悬停主图滚动滚轮翻页，到第 1/6 张后恢复页面滚动 <span class="ztt-good">✅</span>；双击主图放大 3 倍、再双击还原 <span class="ztt-good">✅</span>；翻页时图片与标题错位移动、纵深可见 <span class="ztt-good">✅</span>。zoom 与 parallax 分层：视差写在外层 <code>.ztt-parallax</code>，缩放写在内层 <code>img</code>，两者 transform 不冲突。</div>
+
+    <div class="ztt-defense">
+      <h3>🎤 答辩四连 · 预答</h3>
+      <b>Q1：这段代码什么意思？</b><br>
+      A：<code>keyboard.enabled: true</code> 开启方向键控制；<code>onlyInViewport: true</code> 限制只有轮播在视口内才响应按键，防止在页面其它位置按方向键滚动时误切图；它和原有 loop / autoplay 并不冲突，键盘翻一页后自动播放照常继续。<br>
+      <b>Q2：AI 第一次答的哪里不对？你改了什么？</b><br>
+      A：AI 按 npm 工程的按需引入写法给了 import { Keyboard } + modules: [Keyboard]，但我用的是 script 引入的全量 bundle 文件，这套写法直接 ReferenceError。改法：删掉 import 和 modules 数组，只保留 keyboard 配置；同时补上 AI 第一版没给的 onlyInViewport: true；魔都号标题错字"魔都船"订正为"魔都号"，外链图换成本地 AI 生图。<br>
+      <b>Q3：新参数的作用？</b><br>
+      A：delay 3200 = 每张停留 3.2 秒；disableOnInteraction: false = 手动操作后自动播放不停止；clickable: true = 圆点可点击跳转；keyboard.onlyInViewport = 防误触发；speed 800 = 翻页动画时长（和 delay 是两回事）；creativeEffect.prev/next = 定义前后卡片的位移、旋转、缩放、透明度。<br>
+      <b>Q4：现场把 delay 改成指定值并解释预期变化？</b><br>
+      A：比如改成 <code>delay: 1000</code> → 每张只停 1 秒，翻页节奏明显变快；改成 <code>delay: 8000</code> → 停 8 秒，近乎静止后突然翻页。delay 只管"停留多久"，翻页动画快慢由 speed 控制，改 delay 不会影响动画时长；因为 disableOnInteraction: false，手动切换后仍按新 delay 继续自动播放。
+    </div>
+  </div>
+
+  <!-- ═══════════ 补充 · 2026-11-11 提示词全量记录 ═══════════ -->
+  <div class="ztt-sec">
+    <div class="ztt-sec-head">
+      <span class="ztt-no">＋</span>
+      <h2>补充 · 2026-11-11<small>提示词全量记录：按 AGENTS.md 新规则，本日起每条提示词原文入库</small></h2>
+    </div>
+    <p class="ztt-txt">以下为当日未写入前文任务章节的提示词原文（任务二的 transform 追问、任务三的四项能力已分别记在对应章节），按时间顺序保留；从本日起不再筛选提示词内容。</p>
+    <div class="ztt-chat">
+      <div class="ztt-msg ztt-me">
+        <span class="ztt-role">我（提示词）</span>
+        <div class="ztt-bubble"><code>task2.html</code> 的提示词在哪。</div>
+      </div>
+      <div class="ztt-msg ztt-ai">
+        <span class="ztt-role">AI（回答）</span>
+        <div class="ztt-bubble">任务二的提示词不在 task2.html 内，而在 ztt-ai-log.html 的第 2 节；task2.html 只放了一个跳转按钮。</div>
+      </div>
+      <div class="ztt-msg ztt-me">
+        <span class="ztt-role">我（提示词）</span>
+        <div class="ztt-bubble">agents.md<br>文件在哪<br>各种 .md 都在哪。</div>
+      </div>
+      <div class="ztt-msg ztt-ai">
+        <span class="ztt-role">AI（回答）</span>
+        <div class="ztt-bubble">当前项目没有 .md 文件；桌面范围搜到的 .md 都在另一个项目 <code>Desktop\高级网页.html</code> 与 HBuilderX 安装目录下，与本作业无关。</div>
+      </div>
+      <div class="ztt-msg ztt-me">
+        <span class="ztt-role">我（提示词）</span>
+        <div class="ztt-bubble">立刻给我新建生成。</div>
+      </div>
+      <div class="ztt-msg ztt-ai">
+        <span class="ztt-role">AI（回答）</span>
+        <div class="ztt-bubble">在项目根目录新建 <code>AGENTS.md</code>（项目约定）与 <code>README.md</code>（作品集说明），内容依据现有页面整理，未改动任何 HTML/CSS/JS。</div>
+      </div>
+      <div class="ztt-msg ztt-me">
+        <span class="ztt-role">我（提示词）</span>
+        <div class="ztt-bubble">好的，把 AGENTS.md 移到 swiper 目录下。</div>
+      </div>
+      <div class="ztt-msg ztt-ai">
+        <span class="ztt-role">AI（回答）</span>
+        <div class="ztt-bubble">已移动到 <code>swiper/AGENTS.md</code>，根目录原文件删除，内容未改。</div>
+      </div>
+      <div class="ztt-msg ztt-me">
+        <span class="ztt-role">我（提示词）</span>
+        <div class="ztt-bubble">任务三的第二个。</div>
+      </div>
+      <div class="ztt-msg ztt-ai">
+        <span class="ztt-role">AI（回答）</span>
+        <div class="ztt-bubble">任务三第二项是"挑一个课堂没讲过的 Swiper 能力"（keyboard / mousewheel / zoom / parallax 任选其一）；当时 task3.html 四项都还没做，于是列出四个选项供选择。</div>
+      </div>
+      <div class="ztt-msg ztt-me">
+        <span class="ztt-role">我（提示词）</span>
+        <div class="ztt-bubble">都补上。</div>
+      </div>
+      <div class="ztt-msg ztt-ai">
+        <span class="ztt-role">AI（回答）</span>
+        <div class="ztt-bubble">把 keyboard、mousewheel、zoom、parallax 四项全部加到主图，并完成页面说明、答辩要点与验证（过程见任务三 · 关键对话 4）。</div>
+      </div>
+      <div class="ztt-msg ztt-me">
+        <span class="ztt-role">我（提示词）</span>
+        <div class="ztt-bubble">好的，执行吧。</div>
+      </div>
+      <div class="ztt-msg ztt-ai">
+        <span class="ztt-role">AI（回答）</span>
+        <div class="ztt-bubble">启动本地服务器复测：过渡瞬间图片层与标题层 translateX 数值不同（-0.0249 对 -0.0443），确认视差生效，控制台无报错。</div>
+      </div>
+      <div class="ztt-msg ztt-me">
+        <span class="ztt-role">我（提示词）</span>
+        <div class="ztt-bubble">将今天的提示词加入第一个里面，并设定规则在 AGENTS.md 里面。</div>
+      </div>
+      <div class="ztt-msg ztt-ai">
+        <span class="ztt-role">AI（回答）</span>
+        <div class="ztt-bubble">在 ztt-ai-log.html 新增今日两段对话记录（任务二 transform 追问、任务三四项能力），并在 AGENTS.md 新增「AI 对话记录维护」规则。</div>
+      </div>
+      <div class="ztt-msg ztt-me">
+        <span class="ztt-role">我（提示词）</span>
+        <div class="ztt-bubble">以后我写的提示词你都加进第一个提示词文件里，设定这个规则在 AGENTS.md 里面。</div>
+      </div>
+      <div class="ztt-msg ztt-ai">
+        <span class="ztt-role">AI（回答）</span>
+        <div class="ztt-bubble">规则改为"提示词全量入库、不做筛选"：每条提示词当天原文追加到本页，无对应任务的放进「补充 · YYYY-MM-DD」小节；并补记本节。</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════ 补充 · 2026-11-13 提示词全量记录 ═══════════ -->
+  <div class="ztt-sec">
+    <div class="ztt-sec-head">
+      <span class="ztt-no">＋</span>
+      <h2>补充 · 2026-11-13<small>提示词全量记录：creative 代码位置核查 → 参数检查 → 按方案修正</small></h2>
+    </div>
+    <div class="ztt-chat">
+      <div class="ztt-msg ztt-me">
+        <span class="ztt-role">我（提示词）</span>
+        <div class="ztt-bubble">task1/2/3的creative都在哪</div>
+      </div>
+      <div class="ztt-msg ztt-ai">
+        <span class="ztt-role">AI（回答）</span>
+        <div class="ztt-bubble">只有任务二有 creative：<code>task2.html</code> 主舞台（<code>ztt_getOptions('creative')</code> 与 <code>new Swiper('#zttCreative', ...)</code>）、第 7 个切换按钮、参数讲解代码块；任务一用 cube、任务三用 coverflow + thumbs，均无 creative。基础演示台 <code>swiper-task.html</code> 的第 7 个按钮也复用了这套配置。</div>
+      </div>
+      <div class="ztt-msg ztt-me">
+        <span class="ztt-role">我（提示词）</span>
+        <div class="ztt-bubble">帮我检查任务二 creative 效果的配置参数</div>
+      </div>
+      <div class="ztt-msg ztt-ai">
+        <span class="ztt-role">AI（回答 —— 指出两处问题）</span>
+        <div class="ztt-bubble">对照本地 Swiper 11.2.10 源码逐个核对：参数语法与 prev / next 语义都对，但发现两处问题。<br>
+        ① <code>shadowPerProgress: true</code> 空转：源码要 <code>prev / next</code> 里写了 <code>shadow: true</code> 才会创建 <code>.swiper-slide-shadow</code>，否则阴影永远不出现；<br>
+        ② <code>limitProgress: 2</code> 会让两侧第二张继续外推（prev 的 scale 变 0.4、opacity 变 0.1；next 的 scale 变 1.1），与页面"缩小到 70% / 放大到 1.05 倍"的说法对不上。另外 task2.html 的「AI 对话记录」按钮指向不存在的 <code>ztt-ai-log.html</code>。</div>
+      </div>
+      <div class="ztt-msg ztt-me">
+        <span class="ztt-role">我（提示词）</span>
+        <div class="ztt-bubble">好的，按这个方案修改</div>
+      </div>
+      <div class="ztt-msg ztt-ai">
+        <span class="ztt-role">AI（回答）</span>
+        <div class="ztt-bubble">已修改：<code>limitProgress</code> 由 2 改为 1；<code>prev / next</code> 各补 <code>shadow: true</code>，让 <code>shadowPerProgress</code> 真正生效；并同步任务二页面的参数讲解代码块与本页记录中的配置，保证两处说法一致。</div>
+      </div>
+      <div class="ztt-msg ztt-me">
+        <span class="ztt-role">我（提示词）</span>
+        <div class="ztt-bubble">好的，顺手改掉死链</div>
+      </div>
+      <div class="ztt-msg ztt-ai">
+        <span class="ztt-role">AI（回答）</span>
+        <div class="ztt-bubble">把 5 处「AI 对话记录」入口的 <code>href="ztt-ai-log.html"</code> 改为 <code>提示词.html</code>：<code>swiper/index.html</code>、<code>swiper-task.html</code>、<code>task1~3.html</code>；同时把 <code>README.md</code> 与 <code>AGENTS.md</code> 里对旧文件名的引用一并更正，避免文档与实际文件再次对不上。</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="ztt-back">
+    <a href="../index.html">← 课堂实践目录</a>
+    <a href="index.html" style="margin-left:12px;">Swiper 模块导航</a>
+    <a href="task1.html" style="margin-left:12px;">任务一</a>
+    <a href="task2.html" style="margin-left:12px;">任务二</a>
+    <a href="task3.html" style="margin-left:12px;">任务三</a>
+  </div>
+
+  <footer>AI 对话记录 · Swiper 进阶三任务 · 高级网页设计 · 朱婷婷（24002120525）</footer>
+</div>
+</body>
+</html>

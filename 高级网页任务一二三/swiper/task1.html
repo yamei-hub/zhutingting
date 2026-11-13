@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<link rel="icon" href="data:,">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>任务一 · 提示词工程师 · 朱婷婷</title>
+<!-- 作者：朱婷婷（24002120525）
+     任务一：提示词工程师 —— 同一句需求两轮翻译，左漏 clickable 不可点 vs 右 clickable:true 可点
+     类名 / 变量统一 ztt 前缀；Swiper 库走本地 swiper 目录，不依赖 CDN。 -->
+<link rel="stylesheet" href="swiper/swiper-bundle.min.css">
+<script src="swiper/swiper-bundle.min.js"></script>
+<style>
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{font-family:"Microsoft YaHei","PingFang SC",system-ui,sans-serif;background:#f6f8fc;color:#1f2937}
+  .ztt-wrap{max-width:1000px;margin:0 auto;padding:32px 20px 60px}
+
+  /* 顶部导航 */
+  .ztt-nav{display:flex;flex-wrap:wrap;align-items:center;gap:10px;margin-bottom:18px}
+  .ztt-nav a{display:inline-block;text-decoration:none;color:#0f2b5b;font-size:14px;font-weight:bold;background:#fff;border:1px solid #dbe4ff;border-radius:999px;padding:9px 22px;transition:transform .2s,box-shadow .2s}
+  .ztt-nav a:hover{transform:translateY(-2px);box-shadow:0 8px 18px rgba(15,43,91,.15)}
+  .ztt-nav .ztt-nav-here{margin-left:auto;font-size:13.5px;color:#9ca3af}
+
+  /* 头部 */
+  .ztt-head{background:linear-gradient(135deg,#0f2b5b,#1d5bbf);border-radius:20px;padding:34px 38px;color:#fff;margin-bottom:22px;box-shadow:0 12px 30px rgba(15,43,91,.3)}
+  .ztt-head .ztt-badge{display:inline-block;padding:5px 14px;border-radius:999px;background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.3);font-size:13px;letter-spacing:2px;margin-bottom:14px}
+  .ztt-head h1{font-size:29px;letter-spacing:1px;line-height:1.4}
+  .ztt-head h1 b{color:#ffd166}
+  .ztt-head p{margin-top:12px;font-size:14.5px;color:#d9e3f5;line-height:2}
+
+  /* 章节卡 */
+  .ztt-sec{background:#fff;border-radius:18px;padding:28px 30px;margin-bottom:24px;border:1px solid #e8ecf5;box-shadow:0 4px 14px rgba(31,41,55,.06);position:relative;overflow:hidden}
+  .ztt-sec::before{content:"";position:absolute;left:0;top:0;bottom:0;width:5px;background:linear-gradient(#0f2b5b,#1d5bbf)}
+  .ztt-sec-head{display:flex;align-items:center;gap:14px;margin-bottom:14px}
+  .ztt-sec-head .ztt-no{flex:none;width:42px;height:42px;border-radius:12px;background:linear-gradient(135deg,#0f2b5b,#1d5bbf);color:#fff;font-size:19px;font-weight:bold;display:flex;align-items:center;justify-content:center}
+  .ztt-sec-head h2{font-size:20px;color:#111827}
+  .ztt-sec-head small{display:block;font-weight:normal;color:#9ca3af;font-size:13px;margin-top:3px}
+  .ztt-sec p.ztt-txt{font-size:14.5px;color:#374151;line-height:2;margin-bottom:10px}
+  .ztt-sec p.ztt-txt b{color:#0f2b5b}
+  .ztt-sec code{background:#eef2ff;color:#1d4ed8;padding:1px 7px;border-radius:5px;font-family:Consolas,monospace;font-size:13px}
+
+  /* 要求卡 */
+  .ztt-req{background:#f0fdf4;border:1.5px dashed #16a34a;border-radius:12px;padding:14px 18px;margin:14px 0 6px}
+  .ztt-req h3{font-size:14.5px;color:#15803d;margin-bottom:6px}
+  .ztt-req p{font-size:13.5px;color:#166534;line-height:2}
+  .ztt-req code{background:#dcfce7;color:#15803d;padding:1px 7px;border-radius:5px;font-family:Consolas,monospace;font-size:12.5px}
+
+  /* 轮播台：图片完整展示（contain 留深色底，不裁剪） */
+  .ztt-swiper{width:100%;max-width:760px;margin:0 auto;border-radius:16px;overflow:visible!important}
+  .ztt-swiper .swiper{border-radius:16px;box-shadow:0 10px 26px rgba(15,43,91,.18);background:#0b1a33}
+  .ztt-swiper .swiper-slide{position:relative;aspect-ratio:16/9;background:#0b1a33;display:flex;align-items:center;justify-content:center}
+  .ztt-swiper .swiper-slide img{width:100%;height:100%;object-fit:contain;display:block}
+  .ztt-swiper .ztt-cap{position:absolute;left:0;right:0;bottom:0;padding:34px 20px 14px;color:#fff;background:linear-gradient(transparent,rgba(5,15,35,.82))}
+  .ztt-swiper .ztt-cap h3{font-size:18px;letter-spacing:1px}
+  .ztt-swiper .ztt-cap p{font-size:13px;color:#dbe6f8;margin-top:4px}
+  .ztt-swiper .swiper-pagination-bullet{background:#0f2b5b;opacity:.35}
+  .ztt-swiper .swiper-pagination-bullet-active{background:#e8890c;opacity:1;width:22px;border-radius:6px}
+
+  /* 两轮对照 */
+  /* minmax(0,1fr) + min-width:0：防止 Swiper 内部 slides 撑开列宽，导致两列被容器裁掉 */
+  .ztt-compare{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:22px;margin-top:18px}
+  @media (max-width:760px){.ztt-compare{grid-template-columns:minmax(0,1fr)}}
+  .ztt-compare-col{min-width:0;border:1px solid #e8ecf5;border-radius:16px;padding:18px 18px 20px;background:#fbfcff}
+  .ztt-col-head{display:flex;flex-wrap:wrap;align-items:center;gap:10px;margin-bottom:8px}
+  .ztt-round{font-size:13px;font-weight:bold;color:#0f2b5b}
+  .ztt-badge-bad{margin-left:auto;font-size:12.5px;color:#b91c1c;background:#fef2f2;border:1px solid #fecaca;border-radius:999px;padding:4px 12px}
+  .ztt-badge-good{margin-left:auto;font-size:12.5px;color:#15803d;background:#f0fdf4;border:1px solid #bbf7d0;border-radius:999px;padding:4px 12px}
+  .ztt-col-txt{font-size:13.5px;color:#374151;line-height:1.9;margin-bottom:12px}
+  .ztt-col-txt code{background:#eef2ff;color:#1d4ed8;padding:1px 7px;border-radius:5px;font-family:Consolas,monospace;font-size:12.5px}
+  .ztt-readout{font-size:13.5px;color:#374151;margin:12px 2px 10px;line-height:1.8}
+  .ztt-readout b{color:#0f2b5b;font-size:15px}
+  .ztt-bad-txt{color:#dc2626;font-weight:bold;margin-left:6px}
+  .ztt-good-txt{color:#15803d;font-weight:bold;margin-left:6px}
+  .ztt-code{background:#0f172a;color:#e2e8f0;padding:14px 16px;border-radius:10px;overflow-x:auto;font-family:Consolas,"Courier New",monospace;font-size:13px;line-height:1.8;margin-top:6px;white-space:pre}
+
+  /* 对照表 / 提示词 */
+  .ztt-table{width:100%;border-collapse:collapse;margin:16px 0 6px;font-size:13.5px}
+  .ztt-table th,.ztt-table td{border:1px solid #e5eaf3;padding:10px 12px;text-align:left;line-height:1.8;vertical-align:top}
+  .ztt-table th{background:#eef2ff;color:#0f2b5b;font-weight:bold}
+  .ztt-table code{background:#eef2ff;color:#1d4ed8;padding:1px 7px;border-radius:5px;font-family:Consolas,monospace;font-size:12.5px}
+  .ztt-prompt-compare{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:16px}
+  @media (max-width:760px){.ztt-prompt-compare{grid-template-columns:1fr}}
+  .ztt-prompt-box{border:1px solid #e8ecf5;border-radius:12px;padding:14px 16px;background:#fbfcff}
+  .ztt-prompt-box h4{font-size:14px;color:#0f2b5b;margin-bottom:6px}
+  .ztt-prompt-box p{font-size:13px;color:#374151;line-height:1.9}
+  .ztt-prompt-box ul{margin:6px 0 0 18px;font-size:13px;color:#6b7280;line-height:1.9}
+
+  .ztt-back{display:flex;flex-wrap:wrap;gap:12px;justify-content:center;margin-top:28px}
+  .ztt-back a{display:inline-block;text-decoration:none;color:#0f2b5b;font-size:14.5px;font-weight:bold;background:#fff;border:1px solid #dbe4ff;border-radius:999px;padding:10px 26px;transition:transform .2s,box-shadow .2s}
+  .ztt-back a:hover{transform:translateY(-2px);box-shadow:0 8px 18px rgba(15,43,91,.15)}
+  .ztt-back a.ztt-orange{background:linear-gradient(135deg,#e8890c,#f5a623);color:#fff;border-color:transparent}
+  footer{text-align:center;margin-top:34px;color:#9ca3af;font-size:13px;line-height:2}
+</style>
+</head>
+<body>
+<div class="ztt-wrap">
+
+  <div class="ztt-nav">
+    <a href="../index.html">← 返回课堂实践目录</a>
+    <a href="swiper-task.html">基础演示台</a>
+    <span class="ztt-nav-here">任务一 · 提示词工程师</span>
+  </div>
+
+  <div class="ztt-head">
+    <span class="ztt-badge">任 务 一 · 提 示 词 工 程 师</span>
+    <h1>同一句需求，<b>两种翻译</b></h1>
+    <p>老师要的配置四条：① 无缝循环 ② 3.2 秒自动翻页、手动操作后不停止 ③ 圆点分页器可点击 ④ 初始效果 cube。
+    下面左右两个轮播都在真实运行——左边是第一轮提示词喂出来的，右边是第二轮补齐后的。<b>别听我说，点一下两边的圆点，看那行读数发生了什么。</b></p>
+  </div>
+
+  <div class="ztt-sec">
+    <div class="ztt-sec-head">
+      <span class="ztt-no">★1</span>
+      <h2>两轮对照：只差一个 clickable<small>两个轮播 HTML 完全一样，只有 JS 配置差一个 clickable，点圆点看读数</small></h2>
+    </div>
+
+    <div class="ztt-compare">
+      <!-- 左：第 1 轮 · 漏了 clickable -->
+      <div class="ztt-compare-col">
+        <div class="ztt-col-head">
+          <span class="ztt-round">第 1 轮 · 漏了需求</span>
+          <span class="ztt-badge-bad">圆点只能看，不能点</span>
+        </div>
+        <p class="ztt-col-txt">提示词里只写了"圆点分页器"，AI 理解成"把圆点画出来"，于是只给了 <code>el</code>，没给 <code>clickable</code>。圆点在，但点不动。</p>
+        <div class="ztt-swiper">
+          <div class="swiper" id="zttBad">
+            <div class="swiper-wrapper">
+              <div class="swiper-slide">
+                <img src="swiper-imgs/tiangong_1.jpg" alt="天宫空间站">
+                <div class="ztt-cap"><h3>天宫空间站</h3><p>中国自主建造的近地轨道大型空间站</p></div>
+              </div>
+              <div class="swiper-slide">
+                <img src="swiper-imgs/fuxing_1.jpg" alt="复兴号动车组">
+                <div class="ztt-cap"><h3>复兴号动车组</h3><p>350 km/h · 世界商业运营最高时速</p></div>
+              </div>
+              <div class="swiper-slide">
+                <img src="swiper-imgs/c919_1.jpg" alt="C919 大飞机">
+                <div class="ztt-cap"><h3>C919 大飞机</h3><p>国产干线民用客机 · 翱翔蓝天</p></div>
+              </div>
+              <div class="swiper-slide">
+                <img src="swiper-imgs/fast_1.jpg" alt="中国天眼 FAST">
+                <div class="ztt-cap"><h3>中国天眼 FAST</h3><p>500 米口径球面射电望远镜</p></div>
+              </div>
+            </div>
+            <div class="swiper-pagination" id="zttPagBad"></div>
+          </div>
+        </div>
+        <div class="ztt-readout">点第 3 个圆点 → 当前索引 <b id="zttBadIdx">0</b><span id="zttBadState" class="ztt-bad-txt">没有跳转</span></div>
+        <pre class="ztt-code">pagination: {
+  el: '#zttPagBad'
+}</pre>
+      </div>
+
+      <!-- 右：第 2 轮 · 补齐 clickable -->
+      <div class="ztt-compare-col">
+        <div class="ztt-col-head">
+          <span class="ztt-round">第 2 轮 · 补齐需求</span>
+          <span class="ztt-badge-good">圆点是遥控器，不是装饰</span>
+        </div>
+        <p class="ztt-col-txt">第二轮把需求改写成"圆点必须能<b>点击直接跳转</b>，不是只能看"。同一个 AI，立刻补上了 <code>clickable: true</code>，圆点变成可点的遥控器。</p>
+        <div class="ztt-swiper">
+          <div class="swiper" id="zttGood">
+            <div class="swiper-wrapper">
+              <div class="swiper-slide">
+                <img src="swiper-imgs/tiangong_1.jpg" alt="天宫空间站">
+                <div class="ztt-cap"><h3>天宫空间站</h3><p>中国自主建造的近地轨道大型空间站</p></div>
+              </div>
+              <div class="swiper-slide">
+                <img src="swiper-imgs/fuxing_1.jpg" alt="复兴号动车组">
+                <div class="ztt-cap"><h3>复兴号动车组</h3><p>350 km/h · 世界商业运营最高时速</p></div>
+              </div>
+              <div class="swiper-slide">
+                <img src="swiper-imgs/c919_1.jpg" alt="C919 大飞机">
+                <div class="ztt-cap"><h3>C919 大飞机</h3><p>国产干线民用客机 · 翱翔蓝天</p></div>
+              </div>
+              <div class="swiper-slide">
+                <img src="swiper-imgs/fast_1.jpg" alt="中国天眼 FAST">
+                <div class="ztt-cap"><h3>中国天眼 FAST</h3><p>500 米口径球面射电望远镜</p></div>
+              </div>
+            </div>
+            <div class="swiper-pagination" id="zttPagGood"></div>
+          </div>
+        </div>
+        <div class="ztt-readout">点第 3 个圆点 → 当前索引 <b id="zttGoodIdx">0</b><span id="zttGoodState" class="ztt-good-txt">可跳转</span></div>
+        <pre class="ztt-code">pagination: {
+  el: '#zttPagGood',
+  clickable: true
+}</pre>
+      </div>
+    </div>
+
+    <h3 style="font-size:15.5px;color:#0f2b5b;margin:22px 0 4px">📋 需求 → 参数 对照（两条轮播其余配置完全相同）</h3>
+    <table class="ztt-table">
+      <tr><th>老师提的需求</th><th>对应参数</th><th>第 1 轮 AI 给了吗</th><th>第 2 轮补齐后</th></tr>
+      <tr><td>① 无缝循环</td><td><code>loop: true</code></td><td>❌ 漏了，拖到最后一张顶死</td><td>✅ 首尾无缝衔接</td></tr>
+      <tr><td>② 3.2 秒自动翻页，手动后不停</td><td><code>autoplay: { delay: 3200, disableOnInteraction: false }</code></td><td>❌ 只给 delay，交互后自动停止</td><td>✅ 拖动松手后继续自动翻</td></tr>
+      <tr><td>③ 圆点分页器可点击</td><td><code>pagination: { el, clickable: true }</code></td><td>❌ 只给 el，圆点不可点</td><td>✅ 点圆点直接跳转</td></tr>
+      <tr><td>④ 初始效果 cube</td><td><code>effect: 'cube'</code></td><td>✅ 给了</td><td>✅ 保留</td></tr>
+    </table>
+
+    <div class="ztt-prompt-compare">
+      <div class="ztt-prompt-box">
+        <h4>🔁 第 1 轮提示词原文（漏项）</h4>
+        <p>"帮我用 Swiper 写一个轮播初始化配置：<code>new Swiper('#wySw4', {...})</code>，要求能自动播放，每 3.2 秒翻一页，带圆点分页器，初始切换效果是 cube。"</p>
+        <ul>
+          <li>只写了名词（圆点、自动播放），没写行为（可点击、手动后不停、循环）</li>
+          <li>AI 按字面给了 3 条，漏 3 条体验类需求，控制台不报错</li>
+        </ul>
+      </div>
+      <div class="ztt-prompt-box">
+        <h4>🔁 第 2 轮提示词原文（逐条说清）</h4>
+        <p>"实测有 3 个问题，请补全：① 要无缝循环，加 <code>loop: true</code>；② 手动拖动、点圆点后自动播放不能停止，autoplay 加 <code>disableOnInteraction: false</code>；③ 圆点要能点击直接跳转，pagination 加 <code>clickable: true</code>。其它保持不变。"</p>
+        <ul>
+          <li>每条写成"参数名 + 取值 + 触发条件"，编号列出</li>
+          <li>AI 一次补齐 4 条，逐条实测通过</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="ztt-back">
+    <a href="提示词.html" class="ztt-orange">🤖 查看我与 AI 的对话记录（任务一提示词）→</a>
+    <a href="task2.html">下一页：任务二 creative 电影墙 →</a>
+  </div>
+
+  <footer>任务一 · 提示词工程师 · 大国重器光影展 · 高级网页设计 · 朱婷婷（24002120525） · 2026-2027-1</footer>
+</div>
+
+<script>
+  // ══════════════════════════════════════════════════════════
+  //  任务一作答区 · 作者：朱婷婷（24002120525），变量 ztt_ 前缀
+  // ══════════════════════════════════════════════════════════
+
+  // 左：第 1 轮 · 只给 el，圆点只能看、不能点
+  var ztt_bad = new Swiper('#zttBad', {
+    loop: true,
+    speed: 800,
+    autoplay: { delay: 3200, disableOnInteraction: false },
+    pagination: { el: '#zttPagBad' },
+    effect: 'cube',
+    cubeEffect: { shadow: true, slideShadows: true }
+  });
+  ztt_bad.on('slideChange', function(){
+    document.getElementById('zttBadIdx').textContent = this.realIndex;
+  });
+
+  // 右：第 2 轮 · 补齐 clickable: true，圆点是可点的遥控器
+  var ztt_good = new Swiper('#zttGood', {
+    loop: true,
+    speed: 800,
+    autoplay: { delay: 3200, disableOnInteraction: false },
+    pagination: { el: '#zttPagGood', clickable: true },
+    effect: 'cube',
+    cubeEffect: { shadow: true, slideShadows: true }
+  });
+  // 只更新索引；"已跳转"必须由下面点击探针判定，避免 autoplay 自动翻页误标为已跳转
+  ztt_good.on('slideChange', function(){
+    document.getElementById('zttGoodIdx').textContent = this.realIndex;
+  });
+
+  // 点击圆点后比对点击前后索引：变了才算跳转，没变就是"只能看"
+  function ztt_bindPaginationProbe(swiper, pagEl, idxId, stateId, canClick){
+    var pag = document.querySelector(pagEl);
+    if(!pag) return;
+    pag.addEventListener('click', function(){
+      var before = swiper.realIndex;
+      setTimeout(function(){
+        var after = swiper.realIndex;
+        document.getElementById(idxId).textContent = after;
+        var state = document.getElementById(stateId);
+        if(after !== before){
+          state.textContent = '已跳转';
+          state.className = 'ztt-good-txt';
+        } else {
+          state.textContent = canClick ? '可跳转' : '没有跳转';
+          state.className = canClick ? 'ztt-good-txt' : 'ztt-bad-txt';
+        }
+      }, 350);
+    });
+  }
+  ztt_bindPaginationProbe(ztt_bad,  '#zttPagBad',  'zttBadIdx',  'zttBadState',  false);
+  ztt_bindPaginationProbe(ztt_good, '#zttPagGood', 'zttGoodIdx', 'zttGoodState', true);
+</script>
+</body>
+</html>

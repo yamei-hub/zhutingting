@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<link rel="icon" href="data:,">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Swiper 基础演示台 · 大国重器光影展 · 朱婷婷</title>
+<!-- 作者：朱婷婷（24002120525）
+     说明：本页是 Swiper 课堂基础演示台（演示一~四）；任务一/二/三已拆到独立页面 task1.html / task2.html / task3.html。
+     变量与类名统一用姓名首字母 ztt_ 前缀；Swiper 库走本地 swiper 目录，避免校园网访问 CDN 失败。 -->
+<link rel="stylesheet" href="swiper/swiper-bundle.min.css">
+<script src="swiper/swiper-bundle.min.js"></script>
+<style>
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{font-family:"Microsoft YaHei","PingFang SC",system-ui,sans-serif;background:#f6f8fc;color:#1f2937}
+  .ztt-wrap{max-width:1000px;margin:0 auto;padding:32px 20px 60px}
+
+  .ztt-nav{display:flex;flex-wrap:wrap;align-items:center;gap:10px;margin-bottom:18px}
+  .ztt-nav a{display:inline-block;text-decoration:none;color:#0f2b5b;font-size:14px;font-weight:bold;background:#fff;border:1px solid #dbe4ff;border-radius:999px;padding:9px 22px;transition:transform .2s,box-shadow .2s}
+  .ztt-nav a:hover{transform:translateY(-2px);box-shadow:0 8px 18px rgba(15,43,91,.15)}
+  .ztt-nav .ztt-nav-here{margin-left:auto;font-size:13.5px;color:#9ca3af}
+
+  .ztt-head{background:linear-gradient(135deg,#0f2b5b,#1d5bbf);border-radius:20px;padding:36px 38px;color:#fff;margin-bottom:14px;box-shadow:0 12px 30px rgba(15,43,91,.3)}
+  .ztt-head .ztt-badge{display:inline-block;padding:5px 14px;border-radius:999px;background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.3);font-size:13px;letter-spacing:2px;margin-bottom:14px}
+  .ztt-head h1{font-size:30px;letter-spacing:1px;line-height:1.4}
+  .ztt-head h1 b{color:#ffd166}
+  .ztt-head p{margin-top:12px;font-size:14.5px;color:#d9e3f5;line-height:2}
+  .ztt-goals{display:flex;flex-wrap:wrap;gap:8px;margin-top:18px}
+  .ztt-goals i{font-style:normal;font-size:13px;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.28);padding:6px 14px;border-radius:8px}
+
+  /* 任务入口卡片 */
+  .ztt-taskgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin:22px 0 6px}
+  @media (max-width:760px){.ztt-taskgrid{grid-template-columns:1fr}}
+  .ztt-taskcard{display:block;text-decoration:none;background:#fff;border:1px solid #e8ecf5;border-radius:18px;padding:22px 24px;box-shadow:0 4px 14px rgba(31,41,55,.06);transition:transform .2s,box-shadow .2s;position:relative;overflow:hidden}
+  .ztt-taskcard:hover{transform:translateY(-4px);box-shadow:0 12px 26px rgba(15,43,91,.14)}
+  .ztt-taskcard .ztt-tc-no{font-size:13px;font-weight:bold;color:#e8890c;letter-spacing:1px}
+  .ztt-taskcard h3{font-size:17px;color:#111827;margin:8px 0 6px}
+  .ztt-taskcard p{font-size:13px;color:#6b7280;line-height:1.8}
+  .ztt-taskcard .ztt-tc-go{margin-top:12px;display:inline-block;font-size:13.5px;font-weight:bold;color:#0f2b5b}
+
+  .ztt-rule{background:#fffbea;border:1px solid #fde68a;border-radius:16px;padding:18px 22px;margin-bottom:30px;font-size:14px;color:#7c5e10;line-height:2}
+  .ztt-rule b{color:#b45309}
+  .ztt-rule code{background:#fef3c7;color:#92400e;padding:1px 7px;border-radius:5px;font-family:Consolas,monospace;font-size:13px}
+
+  .ztt-sec{background:#fff;border-radius:18px;padding:28px 30px;margin-bottom:26px;border:1px solid #e8ecf5;box-shadow:0 4px 14px rgba(31,41,55,.06);position:relative;overflow:hidden}
+  .ztt-sec::before{content:"";position:absolute;left:0;top:0;bottom:0;width:5px;background:linear-gradient(#0f2b5b,#1d5bbf)}
+  .ztt-sec-head{display:flex;align-items:center;gap:14px;margin-bottom:14px}
+  .ztt-sec-head .ztt-no{flex:none;width:42px;height:42px;border-radius:12px;background:linear-gradient(135deg,#0f2b5b,#1d5bbf);color:#fff;font-size:19px;font-weight:bold;display:flex;align-items:center;justify-content:center}
+  .ztt-sec-head h2{font-size:20px;color:#111827}
+  .ztt-sec-head small{display:block;font-weight:normal;color:#9ca3af;font-size:13px;margin-top:3px}
+  .ztt-sec p.ztt-txt{font-size:14.5px;color:#374151;line-height:2;margin-bottom:10px}
+  .ztt-sec p.ztt-txt b{color:#0f2b5b}
+  .ztt-sec code{background:#eef2ff;color:#1d4ed8;padding:1px 7px;border-radius:5px;font-family:Consolas,monospace;font-size:13px}
+
+  .ztt-req{background:#f0fdf4;border:1.5px dashed #16a34a;border-radius:12px;padding:14px 18px;margin:14px 0 6px}
+  .ztt-req h3{font-size:14.5px;color:#15803d;margin-bottom:6px}
+  .ztt-req p{font-size:13.5px;color:#166534;line-height:2}
+  .ztt-req code{background:#dcfce7;color:#15803d;padding:1px 7px;border-radius:5px;font-family:Consolas,monospace;font-size:12.5px}
+  .ztt-req .ztt-star{color:#e8890c;font-size:13px;display:block;margin-top:6px}
+
+  .ztt-demo{margin:18px 0 6px}
+  .ztt-demo .ztt-demo-tag{display:inline-block;font-size:12.5px;color:#0f2b5b;background:#e8f0ff;border:1px solid #c7d8f8;border-radius:999px;padding:4px 14px;margin-bottom:12px}
+  .ztt-swiper{width:100%;max-width:760px;margin:0 auto;border-radius:16px;overflow:visible!important}
+  .ztt-swiper .swiper{border-radius:16px;box-shadow:0 10px 26px rgba(15,43,91,.18);background:#0b1a33}
+  .ztt-swiper .swiper-slide{position:relative;aspect-ratio:16/9;background:#0b1a33;display:flex;align-items:center;justify-content:center}
+  .ztt-swiper .swiper-slide img{width:100%;height:100%;object-fit:contain;display:block}
+  .ztt-swiper .ztt-cap{position:absolute;left:0;right:0;bottom:0;padding:34px 20px 14px;color:#fff;background:linear-gradient(transparent,rgba(5,15,35,.82))}
+  .ztt-swiper .ztt-cap h3{font-size:18px;letter-spacing:1px}
+  .ztt-swiper .ztt-cap p{font-size:13px;color:#dbe6f8;margin-top:4px}
+  .ztt-swiper .swiper-pagination-bullet{background:#0f2b5b;opacity:.35}
+  .ztt-swiper .swiper-pagination-bullet-active{background:#e8890c;opacity:1;width:22px;border-radius:6px}
+  .ztt-swiper .swiper-button-next,.ztt-swiper .swiper-button-prev{width:42px;height:42px;border-radius:50%;background:rgba(15,43,91,.65);color:#fff;--swiper-navigation-size:18px;transition:background .2s}
+  .ztt-swiper .swiper-button-next:hover,.ztt-swiper .swiper-button-prev:hover{background:#e8890c}
+
+  .ztt-fx{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0 2px}
+  .ztt-fx button{border:1.5px solid #c7d8f8;background:#fff;color:#1d5bbf;font-size:13.5px;padding:8px 18px;border-radius:999px;cursor:pointer;transition:all .2s;font-family:inherit}
+  .ztt-fx button:hover{transform:translateY(-2px);box-shadow:0 6px 14px rgba(29,91,191,.18)}
+  .ztt-fx button.ztt-on{background:linear-gradient(135deg,#0f2b5b,#1d5bbf);color:#fff;border-color:transparent}
+
+  .ztt-back{text-align:center;margin-top:28px}
+  .ztt-back a{display:inline-block;text-decoration:none;color:#0f2b5b;font-size:14.5px;font-weight:bold;background:#fff;border:1px solid #dbe4ff;border-radius:999px;padding:10px 26px;transition:transform .2s,box-shadow .2s}
+  .ztt-back a:hover{transform:translateY(-2px);box-shadow:0 8px 18px rgba(15,43,91,.15)}
+  .ztt-back a.ztt-orange{background:linear-gradient(135deg,#e8890c,#f5a623);color:#fff;border-color:transparent}
+  footer{text-align:center;margin-top:34px;color:#9ca3af;font-size:13px;line-height:2}
+</style>
+</head>
+<body>
+<div class="ztt-wrap">
+
+  <div class="ztt-nav">
+    <a href="../index.html">← 返回课堂实践目录</a>
+    <span class="ztt-nav-here">基础演示台 · 演示一~四</span>
+  </div>
+
+  <div class="ztt-head">
+    <span class="ztt-badge">高 职 · 高 级 网 页 设 计 · 课 堂 操 作 任 务</span>
+    <h1>Swiper 轮播组件 · <b>大国重器光影展（学生版）</b></h1>
+    <p>HTML 骨架和 CSS 样式已经搭好，图片也备齐了；本页 4 个轮播的 <b>JS 初始化代码</b>写在页面最底部作答区。
+    展品共 6 件：天宫空间站、复兴号动车组、C919 大飞机、奋斗者号、中国天眼 FAST，以及第六件作品<b>爱达·魔都号</b>（AI 生成 16:9 横版图）。</p>
+    <div class="ztt-goals"><i>演示一 · 最小可拖动轮播</i><i>演示二 · 圆点 + 箭头</i><i>演示三 · 自动翻页</i><i>演示四 · 七种效果随心换</i></div>
+  </div>
+
+  <!-- 三个任务独立页入口 -->
+  <div class="ztt-taskgrid">
+    <a class="ztt-taskcard" href="task1.html">
+      <span class="ztt-tc-no">任务一 / 提示词工程师</span>
+      <h3>两轮提示词对照</h3>
+      <p>同一句需求两种翻译：漏 clickable 的不可点 vs 补齐后圆点可跳转，含点击读数与需求对照表。</p>
+      <span class="ztt-tc-go">打开任务一 →</span>
+    </a>
+    <a class="ztt-taskcard" href="task2.html">
+      <span class="ztt-tc-no">任务二 / creative 仿写</span>
+      <h3>creative 电影选片墙</h3>
+      <p>课堂没讲的第 7 种 effect，prev / next 自定义变换逐条拆解，百分号与角度答辩要点。</p>
+      <span class="ztt-tc-go">打开任务二 →</span>
+    </a>
+    <a class="ztt-taskcard" href="task3.html">
+      <span class="ztt-tc-no">任务三 / 综合创作</span>
+      <h3>魔都号 + 联动封面流</h3>
+      <p>第六件展品爱达·魔都号，thumbs 缩略图双向联动，主图 coverflow 大角度旋转堆叠。</p>
+      <span class="ztt-tc-go">打开任务三 →</span>
+    </a>
+  </div>
+
+  <div class="ztt-rule">
+    <b>📋 任务说明（先读再动手）：</b><br>
+    ① Swiper 组件库已通过本地 <code>swiper/swiper-bundle.min.js</code> 引入，<b>不需要</b>再写引入代码；<br>
+    ② 每个"演示台"下面的绿色卡片就是该任务的要求，JS 代码统一写在页面最底部的 <code>&lt;script&gt;</code> 区域内；<br>
+    ③ 每完成一个任务就<b>刷新页面验证</b>：能拖、能点、会自己翻，才算通过；<br>
+    ④ 控制台（F12）报错是你最好的朋友——先读报错，再改代码。
+  </div>
+
+  <!-- 演示一：最小可拖动轮播 -->
+  <div class="ztt-sec">
+    <div class="ztt-sec-head">
+      <span class="ztt-no">1</span>
+      <h2>救活最小轮播<small>三行 JS · 让照片可以按住拖动</small></h2>
+    </div>
+    <p class="ztt-txt">下面是"最小轮播"骨架：三层结构齐全。写出初始化代码，让它至少<b>可以按住拖动</b>。</p>
+    <div class="ztt-req">
+      <h3>✍️ 演示一要求</h3>
+      <p>在页面底部 <code>&lt;script&gt;</code> 中初始化 <code>#wySw1</code>，让它成为可拖动的轮播（最基础写法，一个空配置对象即可）。</p>
+      <span class="ztt-star">⭐ 验证标准：按住鼠标左右拖动，照片能跟着手走</span>
+    </div>
+    <div class="ztt-demo">
+      <span class="ztt-demo-tag">🎛️ 演示一 · 最小轮播（救活后按住拖一拖）</span>
+      <div class="ztt-swiper">
+        <div class="swiper" id="wySw1">
+          <div class="swiper-wrapper">
+            <div class="swiper-slide"><img src="swiper-imgs/tiangong_1.jpg" alt="天宫空间站"><div class="ztt-cap"><h3>天宫空间站</h3><p>2022 年全面建成 · 中国人的太空家园</p></div></div>
+            <div class="swiper-slide"><img src="swiper-imgs/fuxing_1.jpg" alt="复兴号动车组"><div class="ztt-cap"><h3>复兴号动车组</h3><p>350 km/h · 世界商业运营最高时速</p></div></div>
+            <div class="swiper-slide"><img src="swiper-imgs/c919_1.jpg" alt="C919大飞机"><div class="ztt-cap"><h3>C919 大飞机</h3><p>2023 年商业首航 · 国产干线客机翱翔蓝天</p></div></div>
+            <div class="swiper-slide"><img src="swiper-imgs/fendouzhe_1.jpg" alt="奋斗者号"><div class="ztt-cap"><h3>奋斗者号</h3><p>10909 米 · 触碰地球第四极马里亚纳海沟</p></div></div>
+            <div class="swiper-slide"><img src="swiper-imgs/fast_1.jpg" alt="中国天眼"><div class="ztt-cap"><h3>中国天眼 FAST</h3><p>500 米口径 · 世界最大单口径射电望远镜</p></div></div>
+            <div class="swiper-slide"><img src="swiper-imgs/adora_1.jpg" alt="爱达·魔都号"><div class="ztt-cap"><h3>爱达·魔都号</h3><p>2024 年 1 月首航 · 国产大型邮轮扬帆起航</p></div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 演示二：圆点 + 箭头 -->
+  <div class="ztt-sec">
+    <div class="ztt-sec-head">
+      <span class="ztt-no">2</span>
+      <h2>装上遥控器<small>pagination 圆点 + navigation 箭头</small></h2>
+    </div>
+    <p class="ztt-txt">HTML 里已经埋好了三个"遥控器"元素：<code>#wyPag2</code>（圆点）、<code>#wyPrev2</code> / <code>#wyNext2</code>（左右箭头）。请通过配置让它们"通电"。</p>
+    <div class="ztt-req">
+      <h3>✍️ 演示二要求</h3>
+      <p>初始化 <code>#wySw2</code>，实现 4 个效果：<b>① 无缝循环</b>（loop）<b>② 切换动画时长 600 毫秒</b>（speed）<b>③ 圆点分页器且可点击跳转</b>（pagination，别漏 el）<b>④ 两侧箭头可切换</b>（navigation）。</p>
+      <span class="ztt-star">⭐ 验证标准：点圆点能跳转、点箭头能翻页、最后一张继续往后翻会回到第一张</span>
+    </div>
+    <div class="ztt-demo">
+      <span class="ztt-demo-tag">🎛️ 演示二 · 圆点可点 + 箭头可切</span>
+      <div class="ztt-swiper">
+        <div class="swiper" id="wySw2">
+          <div class="swiper-wrapper">
+            <div class="swiper-slide"><img src="swiper-imgs/tiangong_1.jpg" alt="天宫空间站"><div class="ztt-cap"><h3>天宫空间站</h3><p>三舱结构 · 神舟乘组常年值守</p></div></div>
+            <div class="swiper-slide"><img src="swiper-imgs/fuxing_1.jpg" alt="复兴号动车组"><div class="ztt-cap"><h3>复兴号动车组</h3><p>京张高铁智能驾驶 · 百年京张到智能京张</p></div></div>
+            <div class="swiper-slide"><img src="swiper-imgs/c919_1.jpg" alt="C919大飞机"><div class="ztt-cap"><h3>C919 大飞机</h3><p>让中国人的大飞机梦照进现实</p></div></div>
+            <div class="swiper-slide"><img src="swiper-imgs/fendouzhe_1.jpg" alt="奋斗者号"><div class="ztt-cap"><h3>奋斗者号</h3><p>坐底万米 · 深海探测进入"中国时代"</p></div></div>
+            <div class="swiper-slide"><img src="swiper-imgs/fast_1.jpg" alt="中国天眼"><div class="ztt-cap"><h3>中国天眼 FAST</h3><p>南仁东先生 22 年铸就的观天巨目</p></div></div>
+            <div class="swiper-slide"><img src="swiper-imgs/adora_1.jpg" alt="爱达·魔都号"><div class="ztt-cap"><h3>爱达·魔都号</h3><p>海上移动城市 · 中国邮轮制造新篇章</p></div></div>
+          </div>
+          <div class="swiper-pagination" id="wyPag2"></div>
+          <div class="swiper-button-prev" id="wyPrev2"></div>
+          <div class="swiper-button-next" id="wyNext2"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 演示三：自动翻页 -->
+  <div class="ztt-sec">
+    <div class="ztt-sec-head">
+      <span class="ztt-no">3</span>
+      <h2>让它自己翻页<small>autoplay 自动播放 + loop 无缝续播</small></h2>
+    </div>
+    <p class="ztt-txt">网页 Banner 最常见的形态：<b>自己会翻页</b>。<code>autoplay.delay</code> 控制每张停留的毫秒数，<code>disableOnInteraction: false</code> 表示用户手动滑动之后自动播放<b>不停止</b>。</p>
+    <div class="ztt-req">
+      <h3>✍️ 演示三要求</h3>
+      <p>初始化 <code>#wySw3</code>，实现：<b>① 循环播放</b> <b>② 每 2.6 秒自动翻页</b> <b>③ 用户拖动之后自动播放继续</b> <b>④ 保留底部圆点分页器（#wyPag3）</b>。</p>
+      <span class="ztt-star">⭐ 验证标准：什么都不做它会自己翻；拖一下松手后，它还能接着自动翻</span>
+    </div>
+    <div class="ztt-demo">
+      <span class="ztt-demo-tag">🎛️ 演示三 · 每 2.6 秒自动翻页（救活后什么都不用做，看着就行）</span>
+      <div class="ztt-swiper">
+        <div class="swiper" id="wySw3">
+          <div class="swiper-wrapper">
+            <div class="swiper-slide"><img src="swiper-imgs/tiangong_1.jpg" alt="天宫空间站"><div class="ztt-cap"><h3>天宫空间站</h3><p>巡天遥看一千河</p></div></div>
+            <div class="swiper-slide"><img src="swiper-imgs/fuxing_1.jpg" alt="复兴号动车组"><div class="ztt-cap"><h3>复兴号动车组</h3><p>中国速度 · 风驰电掣</p></div></div>
+            <div class="swiper-slide"><img src="swiper-imgs/c919_1.jpg" alt="C919大飞机"><div class="ztt-cap"><h3>C919 大飞机</h3><p>蓝天之上 · 大国担当</p></div></div>
+            <div class="swiper-slide"><img src="swiper-imgs/fendouzhe_1.jpg" alt="奋斗者号"><div class="ztt-cap"><h3>奋斗者号</h3><p>万米深潜 · 无畏探索</p></div></div>
+            <div class="swiper-slide"><img src="swiper-imgs/fast_1.jpg" alt="中国天眼"><div class="ztt-cap"><h3>中国天眼 FAST</h3><p>仰望星空 · 脚踏实地</p></div></div>
+            <div class="swiper-slide"><img src="swiper-imgs/adora_1.jpg" alt="爱达·魔都号"><div class="ztt-cap"><h3>爱达·魔都号</h3><p>巨轮起航 · 驶向深蓝</p></div></div>
+          </div>
+          <div class="swiper-pagination" id="wyPag3"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 演示四：效果实验台 -->
+  <div class="ztt-sec">
+    <div class="ztt-sec-head">
+      <span class="ztt-no">4</span>
+      <h2>七种效果随心换<small>effect 参数 + 进阶：按钮实时切换（含第 7 种 creative 电影墙）</small></h2>
+    </div>
+    <p class="ztt-txt">本演示台初始 cube；点下方按钮可在 7 种效果间实时切换。任务一的提示词迭代、任务二的 creative 参数详解、任务三的联动封面流分别在三个独立页面。</p>
+    <div class="ztt-fx">
+      <button data-fx="slide">slide 平推（稳重）</button>
+      <button data-fx="fade">fade 淡入淡出（优雅）</button>
+      <button class="ztt-on" data-fx="cube">cube 3D 立方体（初始·炫酷）</button>
+      <button data-fx="coverflow">coverflow 画廊堆叠（沉浸）</button>
+      <button data-fx="flip">flip 翻页（复古）</button>
+      <button data-fx="cards">cards 卡片（俏皮）</button>
+      <button data-fx="creative">creative 电影墙（第7种·AI教学）</button>
+    </div>
+    <div class="ztt-demo">
+      <span class="ztt-demo-tag">🎛️ 演示四 · 效果实验台（点按钮切换 effect）</span>
+      <div class="ztt-swiper">
+        <div class="swiper" id="wySw4">
+          <div class="swiper-wrapper">
+            <div class="swiper-slide"><img src="swiper-imgs/tiangong_1.jpg" alt="天宫空间站"><div class="ztt-cap"><h3>天宫空间站</h3><p>试试上面的效果按钮</p></div></div>
+            <div class="swiper-slide"><img src="swiper-imgs/fuxing_1.jpg" alt="复兴号动车组"><div class="ztt-cap"><h3>复兴号动车组</h3><p>同一组照片，七种讲述方式</p></div></div>
+            <div class="swiper-slide"><img src="swiper-imgs/c919_1.jpg" alt="C919大飞机"><div class="ztt-cap"><h3>C919 大飞机</h3><p>企业官网爱用 fade</p></div></div>
+            <div class="swiper-slide"><img src="swiper-imgs/fendouzhe_1.jpg" alt="奋斗者号"><div class="ztt-cap"><h3>奋斗者号</h3><p>游戏网站爱用 cube</p></div></div>
+            <div class="swiper-slide"><img src="swiper-imgs/fast_1.jpg" alt="中国天眼"><div class="ztt-cap"><h3>中国天眼 FAST</h3><p>相册页面爱用 coverflow</p></div></div>
+            <div class="swiper-slide"><img src="swiper-imgs/adora_1.jpg" alt="爱达·魔都号"><div class="ztt-cap"><h3>爱达·魔都号</h3><p>第六件作品 · 邮轮海上巡游</p></div></div>
+          </div>
+          <div class="swiper-pagination" id="wyPag4"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="ztt-back">
+    <a href="提示词.html" class="ztt-orange">🤖 查看我与 AI 的对话记录（三个任务提示词）→</a>
+  </div>
+
+  <footer>Swiper 基础演示台 · 大国重器光影展（学生版） · 高级网页设计 · 朱婷婷（24002120525） · 2026-2027-1</footer>
+</div>
+
+<script>
+  // ══════════════════════════════════════════════════════════
+  //  ✍️ 学生作答区：把 4 个轮播全部救活（参考各演示台上方的绿色任务卡）
+  //  作者：朱婷婷（24002120525），变量统一用姓名首字母 ztt_ 前缀
+  // ══════════════════════════════════════════════════════════
+
+  var ztt_sw1 = new Swiper('#wySw1', {});
+
+  var ztt_sw2 = new Swiper('#wySw2', {
+    loop: true,
+    speed: 600,
+    pagination: { el: '#wyPag2', clickable: true },
+    navigation: { prevEl: '#wyPrev2', nextEl: '#wyNext2' }
+  });
+
+  var ztt_sw3 = new Swiper('#wySw3', {
+    loop: true,
+    autoplay: { delay: 2600, disableOnInteraction: false },
+    pagination: { el: '#wyPag3', clickable: true }
+  });
+
+  function ztt_getSw4Options(ztt_effect) {
+    var ztt_options = {
+      loop: true,
+      speed: 800,
+      autoplay: { delay: 3200, disableOnInteraction: false },
+      pagination: { el: '#wyPag4', clickable: true },
+      keyboard: { enabled: true, onlyInViewport: true },
+      effect: ztt_effect
+    };
+    switch (ztt_effect) {
+      case 'fade':
+        ztt_options.fadeEffect = { crossFade: true };
+        break;
+      case 'cube':
+        ztt_options.cubeEffect = { shadow: true, slideShadows: true, shadowOffset: 20, shadowScale: 0.94 };
+        break;
+      case 'coverflow':
+        ztt_options.coverflowEffect = { rotate: 30, stretch: 0, depth: 100, modifier: 1, slideShadows: true };
+        break;
+      case 'flip':
+        ztt_options.flipEffect = { slideShadows: true, limitRotation: true };
+        break;
+      case 'cards':
+        ztt_options.cardsEffect = { slideShadows: false, perSlideOffset: 8, perSlideRotate: 2 };
+        break;
+      case 'creative':
+        ztt_options.creativeEffect = {
+          limitProgress: 2,
+          shadowPerProgress: true,
+          prev: { translate: ['-85%', 0, -320], rotate: [0, 0, -12], scale: 0.7, opacity: 0.55 },
+          next: { translate: ['85%', 0, 320], rotate: [0, 0, 12], scale: 1.05, opacity: 0.55 }
+        };
+        break;
+      default:
+        break;
+    }
+    return ztt_options;
+  }
+
+  var ztt_sw4 = new Swiper('#wySw4', ztt_getSw4Options('cube'));
+
+  document.querySelectorAll('.ztt-fx button').forEach(function(ztt_btn){
+    ztt_btn.addEventListener('click', function(){
+      document.querySelectorAll('.ztt-fx button').forEach(function(ztt_each){ ztt_each.classList.remove('ztt-on'); });
+      ztt_btn.classList.add('ztt-on');
+      var ztt_fx = ztt_btn.dataset.fx;
+      ztt_sw4.destroy(true, true);
+      ztt_sw4 = new Swiper('#wySw4', ztt_getSw4Options(ztt_fx));
+    });
+  });
+</script>
+</body>
+</html>
