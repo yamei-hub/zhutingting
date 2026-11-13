@@ -1,0 +1,153 @@
+/*
+  作者：朱婷婷
+  建立时间：2026-11-04
+  使用大模型：GLM
+  功能名称：汽车导购 Tab 选项卡样式（一比一还原课堂测试效果图）
+  命名规则：所有 CSS 类名均以 ztt 开头
+*/
+
+/* 清除默认内外边距 */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* 页面整体：灰色背景居中展示选项卡组件 */
+body {
+  font-family: "Microsoft YaHei", "SimSun", "Segoe UI", sans-serif;
+  font-size: 14px;
+  color: #333;
+  background: #f5f6f8;
+  display: flex;
+  justify-content: center;
+  padding-top: 60px;
+}
+
+/* 选项卡组件最外层容器 */
+.zttTabBox {
+  width: 470px;
+  background: #fff;
+  border: 1px solid #b9c6da;
+  box-shadow: 0 4px 14px rgba(60, 90, 140, 0.1);
+}
+
+/* 选项卡导航栏 */
+.zttTabNav {
+  display: flex;
+  background: #f2f4f7;
+  border-bottom: 1px solid #b9c6da;
+  padding: 5px 5px 0;
+}
+
+/* 选项卡按钮 */
+.zttTabBtn {
+  flex: 1;
+  padding: 8px 0;
+  border: 1px solid transparent;
+  border-bottom: none;
+  background: transparent;
+  font-family: inherit;
+  font-size: 14px;
+  color: #333;
+  cursor: pointer;
+  transition: color 0.15s ease, background 0.15s ease;
+}
+
+/* 选项卡按钮悬停效果 */
+.zttTabBtn:hover {
+  color: #c00;
+}
+
+/* 选中状态：白底 + 蓝色边框 + 加粗，并与内容区相连 */
+.zttTabBtn.zttActive {
+  background: #fff;
+  border: 1px solid #4a72b8;
+  border-bottom: none;
+  font-weight: 700;
+  color: #000;
+  position: relative;
+  z-index: 2;
+  margin-bottom: -1px;
+}
+
+/* 选项卡内容区 */
+.zttTabContent {
+  background: #fff;
+}
+
+/* 内容面板：默认隐藏，选中时显示 */
+.zttTabPanel {
+  display: none;
+  padding: 14px 16px 16px;
+}
+
+/* 选中状态的内容面板 */
+.zttTabPanel.zttActive {
+  display: block;
+}
+
+/* 面板红色大标题 */
+.zttPanelTitle {
+  font-size: 16px;
+  font-weight: 700;
+  margin-bottom: 10px;
+}
+
+/* 面板标题链接 */
+.zttPanelTitle a {
+  color: #c00;
+  text-decoration: none;
+}
+
+/* 面板标题链接悬停效果 */
+.zttPanelTitle a:hover {
+  text-decoration: underline;
+}
+
+/* 新闻列表：去除默认样式 */
+.zttNewsList {
+  list-style: none;
+}
+
+/* 新闻列表项：圆点符号 + 左文右日期布局 */
+.zttNewsList li {
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  padding: 5px 0 5px 13px;
+  line-height: 1.7;
+}
+
+/* 列表项前面的圆点符号 */
+.zttNewsList li::before {
+  content: "•";
+  position: absolute;
+  left: 1px;
+  color: #555;
+}
+
+/* 新闻链接：占满剩余宽度，使日期靠右对齐 */
+.zttNewsList li a {
+  flex: 1;
+  color: #333;
+  text-decoration: none;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* 新闻链接悬停效果 */
+.zttNewsList li a:hover {
+  color: #c00;
+  text-decoration: underline;
+}
+
+/* 新闻日期 */
+.zttDate {
+  color: #999;
+  font-size: 12px;
+  white-space: nowrap;
+}

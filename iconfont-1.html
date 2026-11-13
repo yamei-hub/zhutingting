@@ -1,0 +1,587 @@
+<!DOCTYPE html>
+<!--
+  作者：朱婷婷
+  建立时间：2026-11-13
+  使用大模型：DeepSeek-V4.1-Flash
+  功能名称：图标样本册卷一 · Font Awesome 字体图标艺术品牌展示页
+-->
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>青爻 · 图标样本册 卷一 / 字体图标</title>
+<link rel="stylesheet" href="./cdn/css/all.min.css">
+<style>
+  :root {
+    --ztt_paper: #e6ebe4;
+    --ztt_paper_deep: #dbe3da;
+    --ztt_ink: #16231d;
+    --ztt_ink_soft: #4d5c54;
+    --ztt_cinnabar: #a63d2c;
+    --ztt_celadon: #3d6b60;
+    --ztt_rule: rgba(22, 35, 29, 0.18);
+    --ztt_serif: "Songti SC", "STSong", "Noto Serif SC", "Source Han Serif SC", "SimSun", serif;
+    --ztt_sans: "PingFang SC", "Microsoft YaHei", "Segoe UI", sans-serif;
+    --ztt_mono: "Consolas", "SFMono-Regular", "Menlo", monospace;
+  }
+
+  * {
+    box-sizing: border-box;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    margin: 0;
+    background: var(--ztt_paper);
+    color: var(--ztt_ink);
+    font-family: var(--ztt_sans);
+    font-size: 16px;
+    line-height: 1.75;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .ztt_frame {
+    display: grid;
+    grid-template-columns: 78px minmax(0, 1fr);
+  }
+
+  /* 左侧书脊：竖排刊名，模拟书脊压印 */
+  .ztt_spine {
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    border-right: 1px solid var(--ztt_rule);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    padding: 26px 0 22px;
+  }
+
+  .ztt_spine_mark {
+    width: 30px;
+    height: 30px;
+    border: 1px solid var(--ztt_ink);
+    border-radius: 50%;
+    display: grid;
+    place-items: center;
+    font-family: var(--ztt_serif);
+    font-size: 13px;
+    line-height: 1;
+  }
+
+  .ztt_spine_title {
+    writing-mode: vertical-rl;
+    font-family: var(--ztt_serif);
+    font-size: 15px;
+    letter-spacing: 0.42em;
+    color: var(--ztt_ink);
+  }
+
+  .ztt_spine_year {
+    writing-mode: vertical-rl;
+    font-size: 11px;
+    letter-spacing: 0.22em;
+    color: var(--ztt_ink_soft);
+  }
+
+  .ztt_main {
+    padding: 0 56px 0 56px;
+  }
+
+  .ztt_topbar {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 20px;
+    padding: 26px 0;
+    border-bottom: 1px solid var(--ztt_rule);
+    font-size: 13px;
+    color: var(--ztt_ink_soft);
+  }
+
+  .ztt_topbar strong {
+    font-family: var(--ztt_serif);
+    font-size: 15px;
+    font-weight: 400;
+    letter-spacing: 0.16em;
+    color: var(--ztt_ink);
+  }
+
+  .ztt_topbar_nav {
+    display: flex;
+    gap: 22px;
+  }
+
+  .ztt_topbar_nav a {
+    color: var(--ztt_ink_soft);
+    text-decoration: none;
+    border-bottom: 1px solid transparent;
+    padding-bottom: 2px;
+    transition: color 0.25s ease, border-color 0.25s ease;
+  }
+
+  .ztt_topbar_nav a:hover {
+    color: var(--ztt_cinnabar);
+    border-bottom-color: var(--ztt_cinnabar);
+  }
+
+  .ztt_hero {
+    display: grid;
+    grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr);
+    align-items: center;
+    gap: 40px;
+    padding: 74px 0 68px;
+    border-bottom: 1px solid var(--ztt_rule);
+  }
+
+  .ztt_kicker {
+    font-size: 12px;
+    letter-spacing: 0.3em;
+    color: var(--ztt_celadon);
+    margin: 0 0 22px;
+  }
+
+  .ztt_hero h1 {
+    font-family: var(--ztt_serif);
+    font-size: clamp(3.2rem, 7vw, 6.2rem);
+    font-weight: 400;
+    line-height: 1.02;
+    letter-spacing: 0.03em;
+    margin: 0;
+  }
+
+  .ztt_hero h1 em {
+    font-style: normal;
+    color: var(--ztt_cinnabar);
+  }
+
+  .ztt_lead {
+    max-width: 34em;
+    margin: 28px 0 0;
+    color: var(--ztt_ink_soft);
+    font-size: 15.5px;
+    line-height: 1.95;
+  }
+
+  .ztt_hero_meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px 26px;
+    margin-top: 30px;
+    font-size: 12.5px;
+    color: var(--ztt_ink_soft);
+    letter-spacing: 0.08em;
+  }
+
+  /* 巨大的空心字形：字体图标本身就是字形，这里把它当版画用 */
+  .ztt_glyph_stage {
+    position: relative;
+    display: grid;
+    place-items: center;
+    min-height: 320px;
+  }
+
+  .ztt_glyph_stage::before {
+    content: "";
+    position: absolute;
+    inset: 12% 10%;
+    border: 1px solid var(--ztt_rule);
+    border-radius: 50%;
+  }
+
+  .ztt_glyph_stage i {
+    font-size: clamp(150px, 20vw, 250px);
+    line-height: 1;
+    color: transparent;
+    -webkit-text-stroke: 1.4px var(--ztt_ink);
+    transform: rotate(-8deg);
+  }
+
+  .ztt_section {
+    padding: 62px 0;
+    border-bottom: 1px solid var(--ztt_rule);
+  }
+
+  .ztt_section_head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 12px 30px;
+    margin-bottom: 36px;
+  }
+
+  .ztt_section_head h2 {
+    font-family: var(--ztt_serif);
+    font-size: clamp(1.6rem, 2.4vw, 2.3rem);
+    font-weight: 400;
+    letter-spacing: 0.04em;
+    margin: 0;
+  }
+
+  .ztt_section_head p {
+    margin: 0;
+    max-width: 30em;
+    color: var(--ztt_ink_soft);
+    font-size: 14px;
+  }
+
+  /* 字号序列 */
+  .ztt_scale {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    border-top: 1px solid var(--ztt_ink);
+  }
+
+  .ztt_scale_item {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-end;
+    gap: 16px;
+    padding: 26px 18px 18px;
+    border-right: 1px solid var(--ztt_rule);
+    border-bottom: 1px solid var(--ztt_rule);
+    min-height: 190px;
+    transition: background 0.3s ease;
+  }
+
+  .ztt_scale_item:last-child {
+    border-right: none;
+  }
+
+  .ztt_scale_item i {
+    color: var(--ztt_celadon);
+    line-height: 1;
+    transition: color 0.3s ease;
+  }
+
+  .ztt_scale_item:hover {
+    background: var(--ztt_paper_deep);
+  }
+
+  .ztt_scale_item:hover i {
+    color: var(--ztt_cinnabar);
+  }
+
+  .ztt_scale_label {
+    font-size: 12px;
+    letter-spacing: 0.14em;
+    color: var(--ztt_ink_soft);
+  }
+
+  /* 图标格：细线表格，不做圆角卡片 */
+  .ztt_table {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    border-top: 1px solid var(--ztt_ink);
+    border-left: 1px solid var(--ztt_rule);
+  }
+
+  .ztt_cell {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    padding: 28px 20px 22px;
+    border-right: 1px solid var(--ztt_rule);
+    border-bottom: 1px solid var(--ztt_rule);
+    transition: background 0.32s ease, color 0.32s ease;
+  }
+
+  .ztt_cell i {
+    font-size: 30px;
+    line-height: 1;
+    color: var(--ztt_ink);
+    transition: color 0.32s ease, transform 0.32s ease;
+  }
+
+  .ztt_cell_name {
+    font-size: 12.5px;
+    letter-spacing: 0.1em;
+    color: var(--ztt_ink_soft);
+  }
+
+  .ztt_cell:hover {
+    background: var(--ztt_ink);
+  }
+
+  .ztt_cell:hover i {
+    color: var(--ztt_paper);
+    transform: translateY(-3px);
+  }
+
+  .ztt_cell:hover .ztt_cell_name {
+    color: rgba(230, 235, 228, 0.72);
+  }
+
+  /* 深色带：品牌字标 */
+  .ztt_band {
+    margin: 62px 0;
+    background: var(--ztt_ink);
+    color: var(--ztt_paper);
+    padding: 52px 44px 46px;
+  }
+
+  .ztt_band h2 {
+    font-family: var(--ztt_serif);
+    font-size: 1.6rem;
+    font-weight: 400;
+    margin: 0 0 8px;
+    letter-spacing: 0.06em;
+  }
+
+  .ztt_band p {
+    margin: 0 0 34px;
+    max-width: 34em;
+    font-size: 14px;
+    color: rgba(230, 235, 228, 0.68);
+  }
+
+  .ztt_brand_row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 44px;
+    align-items: center;
+  }
+
+  .ztt_brand_row a {
+    display: grid;
+    place-items: center;
+    color: rgba(230, 235, 228, 0.86);
+    text-decoration: none;
+    transition: color 0.28s ease, transform 0.28s ease;
+  }
+
+  .ztt_brand_row a i {
+    font-size: 38px;
+    line-height: 1;
+  }
+
+  .ztt_brand_row a:hover {
+    color: #e8b4a4;
+    transform: translateY(-5px);
+  }
+
+  .ztt_usage {
+    display: grid;
+    grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+    gap: 44px;
+    align-items: start;
+  }
+
+  .ztt_usage h2 {
+    font-family: var(--ztt_serif);
+    font-size: clamp(1.6rem, 2.4vw, 2.2rem);
+    font-weight: 400;
+    margin: 0 0 18px;
+  }
+
+  .ztt_usage p {
+    margin: 0 0 14px;
+    color: var(--ztt_ink_soft);
+    font-size: 14.5px;
+  }
+
+  .ztt_code {
+    border-left: 2px solid var(--ztt_cinnabar);
+    background: rgba(22, 35, 29, 0.045);
+    padding: 22px 24px;
+    font-family: var(--ztt_mono);
+    font-size: 13px;
+    line-height: 2;
+    color: var(--ztt_ink);
+    overflow-x: auto;
+    white-space: pre;
+  }
+
+  .ztt_foot {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 18px 40px;
+    padding: 34px 0 56px;
+    font-size: 12.5px;
+    color: var(--ztt_ink_soft);
+  }
+
+  .ztt_foot a {
+    color: var(--ztt_ink);
+    text-decoration: none;
+    border-bottom: 1px solid var(--ztt_rule);
+  }
+
+  .ztt_foot a:hover {
+    color: var(--ztt_cinnabar);
+    border-bottom-color: var(--ztt_cinnabar);
+  }
+
+  @media (max-width: 900px) {
+    .ztt_frame {
+      grid-template-columns: 1fr;
+    }
+
+    .ztt_spine {
+      display: none;
+    }
+
+    .ztt_main {
+      padding: 0 22px;
+    }
+
+    .ztt_hero,
+    .ztt_usage {
+      grid-template-columns: 1fr;
+    }
+
+    .ztt_glyph_stage {
+      min-height: 220px;
+    }
+
+    .ztt_table,
+    .ztt_scale {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .ztt_scale_item:last-child {
+      border-right: 1px solid var(--ztt_rule);
+    }
+
+    .ztt_band {
+      padding: 38px 24px;
+    }
+  }
+</style>
+</head>
+<body>
+  <div class="ztt_frame">
+    <aside class="ztt_spine">
+      <div class="ztt_spine_mark">爻</div>
+      <div class="ztt_spine_title">青爻 · 图标样本册</div>
+      <div class="ztt_spine_year">二〇二六</div>
+    </aside>
+
+    <div class="ztt_main">
+      <header class="ztt_topbar">
+        <strong>卷一 · 字体图标</strong>
+        <nav class="ztt_topbar_nav">
+          <a href="./iconfont-1.html">卷一</a>
+          <a href="./iconfont-2.html">卷二</a>
+          <a href="./index.html">返回索引</a>
+        </nav>
+      </header>
+
+      <section class="ztt_hero">
+        <div>
+          <p class="ztt_kicker">字体与图标样本册</p>
+          <h1>字形<br><em>即图标</em></h1>
+          <p class="ztt_lead">
+            字体图标把图形画进一套字体文件里：尺寸跟着字号走，颜色跟着文字走，
+            排进段落里也不会掉队。卷一收录 Font Awesome 6.5.2 的二十六枚图标，
+            全部由本地的字体文件渲染，不向外部网络请求任何资源。
+          </p>
+          <div class="ztt_hero_meta">
+            <span>来源 · Font Awesome 6.5.2</span>
+            <span>方式 · 字体字形</span>
+            <span>本地目录 · cdn</span>
+          </div>
+        </div>
+
+        <div class="ztt_glyph_stage" aria-hidden="true">
+          <i class="fa-solid fa-pen-nib"></i>
+        </div>
+      </section>
+
+      <section class="ztt_section">
+        <div class="ztt_section_head">
+          <h2>一枚星形，四级字号</h2>
+          <p>字体图标的尺寸由 font-size 决定，和文字完全一致。下面四格只是改了字号，字形本身缓存于同一份字体文件。</p>
+        </div>
+
+        <div class="ztt_scale">
+          <div class="ztt_scale_item">
+            <i class="fa-regular fa-star" style="font-size: 16px;"></i>
+            <span class="ztt_scale_label">16 px · 1rem</span>
+          </div>
+          <div class="ztt_scale_item">
+            <i class="fa-regular fa-star" style="font-size: 32px;"></i>
+            <span class="ztt_scale_label">32 px · 2rem</span>
+          </div>
+          <div class="ztt_scale_item">
+            <i class="fa-solid fa-star" style="font-size: 64px;"></i>
+            <span class="ztt_scale_label">64 px · 4rem</span>
+          </div>
+          <div class="ztt_scale_item">
+            <i class="fa-solid fa-star" style="font-size: 128px;"></i>
+            <span class="ztt_scale_label">128 px · 8rem</span>
+          </div>
+        </div>
+      </section>
+
+      <section class="ztt_section">
+        <div class="ztt_section_head">
+          <h2>通用字形</h2>
+          <p>十六枚常用图标，均取自 solid 与 regular 两套字形。鼠标移入，格子翻成墨色。</p>
+        </div>
+
+        <div class="ztt_table">
+          <div class="ztt_cell"><i class="fa-solid fa-house"></i><span class="ztt_cell_name">house · 首页</span></div>
+          <div class="ztt_cell"><i class="fa-solid fa-compass"></i><span class="ztt_cell_name">compass · 指南</span></div>
+          <div class="ztt_cell"><i class="fa-solid fa-palette"></i><span class="ztt_cell_name">palette · 调色</span></div>
+          <div class="ztt_cell"><i class="fa-solid fa-pen-nib"></i><span class="ztt_cell_name">pen-nib · 笔尖</span></div>
+          <div class="ztt_cell"><i class="fa-solid fa-layer-group"></i><span class="ztt_cell_name">layer-group · 图层</span></div>
+          <div class="ztt_cell"><i class="fa-solid fa-swatchbook"></i><span class="ztt_cell_name">swatchbook · 色卡</span></div>
+          <div class="ztt_cell"><i class="fa-solid fa-cube"></i><span class="ztt_cell_name">cube · 立方</span></div>
+          <div class="ztt_cell"><i class="fa-solid fa-feather"></i><span class="ztt_cell_name">feather · 羽毛</span></div>
+          <div class="ztt_cell"><i class="fa-solid fa-wand-magic-sparkles"></i><span class="ztt_cell_name">wand · 魔杖</span></div>
+          <div class="ztt_cell"><i class="fa-solid fa-camera-retro"></i><span class="ztt_cell_name">camera · 相机</span></div>
+          <div class="ztt_cell"><i class="fa-solid fa-bezier-curve"></i><span class="ztt_cell_name">bezier · 曲线</span></div>
+          <div class="ztt_cell"><i class="fa-solid fa-scissors"></i><span class="ztt_cell_name">scissors · 剪刀</span></div>
+          <div class="ztt_cell"><i class="fa-solid fa-stamp"></i><span class="ztt_cell_name">stamp · 印记</span></div>
+          <div class="ztt_cell"><i class="fa-solid fa-shapes"></i><span class="ztt_cell_name">shapes · 形状</span></div>
+          <div class="ztt_cell"><i class="fa-solid fa-vector-square"></i><span class="ztt_cell_name">vector · 矢量</span></div>
+          <div class="ztt_cell"><i class="fa-solid fa-eye-dropper"></i><span class="ztt_cell_name">dropper · 取色</span></div>
+        </div>
+      </section>
+
+      <section class="ztt_band">
+        <h2>品牌字标</h2>
+        <p>品牌图标单独打包在 brands 字形中。它们和文字同权重，可以被字号、颜色随意改写，也不会因为放大而发糊。</p>
+        <div class="ztt_brand_row">
+          <a href="https://www.figma.com" title="Figma"><i class="fa-brands fa-figma"></i></a>
+          <a href="https://github.com" title="GitHub"><i class="fa-brands fa-github"></i></a>
+          <a href="https://www.behance.net" title="Behance"><i class="fa-brands fa-behance"></i></a>
+          <a href="https://dribbble.com" title="Dribbble"><i class="fa-brands fa-dribbble"></i></a>
+          <a href="https://www.pinterest.com" title="Pinterest"><i class="fa-brands fa-pinterest"></i></a>
+          <a href="https://www.spotify.com" title="Spotify"><i class="fa-brands fa-spotify"></i></a>
+        </div>
+      </section>
+
+      <section class="ztt_section" style="border-bottom: none;">
+        <div class="ztt_usage">
+          <div>
+            <h2>用法</h2>
+            <p>先引入本地样式表，再用两个类名组合出字形：一套是风格（solid、regular、brands），一套是图标名。</p>
+            <p>样式表、字体文件与脚本都放在 <span style="font-family: var(--ztt_mono);">cdn</span> 目录中，页面离线也能正常显示。</p>
+          </div>
+          <pre class="ztt_code">&lt;link rel="stylesheet" href="./cdn/css/all.min.css"&gt;
+
+&lt;i class="fa-solid fa-house"&gt;&lt;/i&gt;
+&lt;i class="fa-regular fa-star"&gt;&lt;/i&gt;
+&lt;i class="fa-brands fa-figma"&gt;&lt;/i&gt;</pre>
+        </div>
+      </section>
+
+      <footer class="ztt_foot">
+        <span>青爻工作室 · 图标样本册 卷一 / 字体图标</span>
+        <span>图标 Font Awesome 6.5.2 · 字体 SIL OFL 1.1 · 图标 CC BY 4.0</span>
+        <span><a href="./iconfont-2.html">翻阅卷二 · 矢量</a> ／ <a href="./index.html">返回索引</a></span>
+      </footer>
+    </div>
+  </div>
+</body>
+</html>

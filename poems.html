@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<!--
+  作者：朱婷婷
+  建立时间：2026-11-13
+  使用大模型：DeepSeek-V4.1-Flash
+  功能名称：诗词图鉴页面（上图下文卡片），通过本地 3004 端口服务器读取 db/db.json 中 poems 的 pic、title、content
+-->
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>诗词图鉴 - 朱婷婷</title>
+  <style>
+    :root {
+      --ztt_paper: #f7f4ee;
+      --ztt_ink: #2b2723;
+      --ztt_ink_soft: #6b6259;
+      --ztt_line: rgba(43, 39, 35, 0.14);
+      --ztt_accent: #a5462f;
+      --ztt_serif: "Songti SC", "STSong", "Noto Serif SC", "SimSun", serif;
+      --ztt_sans: "PingFang SC", "Microsoft YaHei", "Segoe UI", sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      background: var(--ztt_paper);
+      color: var(--ztt_ink);
+      font-family: var(--ztt_sans);
+      line-height: 1.8;
+    }
+
+    .ztt_page {
+      width: min(1180px, calc(100% - 48px));
+      margin: 0 auto;
+      padding: 48px 0 72px;
+    }
+
+    /* 页头 */
+    .ztt_head {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: flex-end;
+      justify-content: space-between;
+      gap: 14px 30px;
+      padding-bottom: 22px;
+      border-bottom: 1px solid var(--ztt_line);
+    }
+
+    .ztt_head h1 {
+      margin: 0;
+      font-family: var(--ztt_serif);
+      font-size: clamp(1.9rem, 3.4vw, 2.8rem);
+      font-weight: 400;
+      letter-spacing: 0.06em;
+    }
+
+    .ztt_head p {
+      margin: 8px 0 0;
+      color: var(--ztt_ink_soft);
+      font-size: 14px;
+    }
+
+    .ztt_home {
+      color: var(--ztt_accent);
+      text-decoration: none;
+      font-size: 14px;
+      border-bottom: 1px solid var(--ztt_accent);
+      padding-bottom: 2px;
+    }
+
+    /* 卡片列表：上图下文 */
+    .ztt_grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 30px 26px;
+      margin-top: 40px;
+    }
+
+    .ztt_card {
+      display: flex;
+      flex-direction: column;
+      border: 1px solid var(--ztt_line);
+      background: #fffdf9;
+    }
+
+    /* 图片在上 */
+    .ztt_card_img {
+      display: block;
+      width: 100%;
+      aspect-ratio: 4 / 3;
+      object-fit: cover;
+      background: #e8e2d8;
+    }
+
+    /* 文字在下 */
+    .ztt_card_body {
+      padding: 20px 20px 24px;
+    }
+
+    .ztt_card_title {
+      margin: 0 0 10px;
+      font-family: var(--ztt_serif);
+      font-size: 1.3rem;
+      font-weight: 400;
+      letter-spacing: 0.08em;
+    }
+
+    .ztt_card_title::after {
+      content: "";
+      display: block;
+      width: 28px;
+      height: 1px;
+      margin-top: 10px;
+      background: var(--ztt_accent);
+    }
+
+    .ztt_card_content {
+      margin: 14px 0 0;
+      color: var(--ztt_ink_soft);
+      font-size: 15px;
+      line-height: 1.95;
+    }
+
+    /* 提示信息 */
+    .ztt_tip {
+      margin-top: 40px;
+      padding: 22px 24px;
+      border-left: 2px solid var(--ztt_accent);
+      background: rgba(165, 70, 47, 0.05);
+      font-size: 14.5px;
+      color: var(--ztt_ink_soft);
+    }
+
+    @media (max-width: 600px) {
+      .ztt_page {
+        width: calc(100% - 32px);
+        padding-top: 32px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="ztt_page">
+    <header class="ztt_head">
+      <div>
+        <h1>诗词图鉴</h1>
+        <p>数据来源：db/db.json 的 poems 字段，由 3004 端口服务器提供</p>
+      </div>
+      <a class="ztt_home" href="./index.html">返回首页</a>
+    </header>
+
+    <!-- 卡片容器，由 JS 根据接口数据渲染 -->
+    <main class="ztt_grid" id="ztt_grid"></main>
+
+    <!-- 加载失败时的提示 -->
+    <div class="ztt_tip" id="ztt_tip" hidden></div>
+  </div>
+
+  <script>
+    // 函数功能：把一条诗词数据组装成“上图下文”的卡片元素
+    function ztt_createCard(ztt_poem) {
+      var ztt_card = document.createElement("article");
+      ztt_card.className = "ztt_card";
+
+      // 图片在上
+      var ztt_img = document.createElement("img");
+      ztt_img.className = "ztt_card_img";
+      ztt_img.src = ztt_poem.pic;
+      ztt_img.alt = ztt_poem.title || "诗词配图";
+      ztt_img.loading = "lazy";
+      // 图片来自外部图床，禁止发送 Referer，避免图床按来源拦截导致破图
+      ztt_img.referrerPolicy = "no-referrer";
+      // 图片加载失败时给出占位提示，避免出现破图
+      ztt_img.addEventListener("error", function () {
+        ztt_img.style.background = "#e8e2d8";
+        ztt_img.alt = "图片加载失败";
+      });
+
+      // 文字在下
+      var ztt_body = document.createElement("div");
+      ztt_body.className = "ztt_card_body";
+
+      var ztt_title = document.createElement("h2");
+      ztt_title.className = "ztt_card_title";
+      ztt_title.textContent = ztt_poem.title || "无题";
+
+      var ztt_content = document.createElement("p");
+      ztt_content.className = "ztt_card_content";
+      ztt_content.textContent = ztt_poem.content || "";
+
+      ztt_body.appendChild(ztt_title);
+      ztt_body.appendChild(ztt_content);
+      ztt_card.appendChild(ztt_img);
+      ztt_card.appendChild(ztt_body);
+
+      return ztt_card;
+    }
+
+    // 函数功能：把全部诗词渲染到页面容器中，数据为空时给出提示
+    function ztt_renderPoems(ztt_poems) {
+      var ztt_grid = document.getElementById("ztt_grid");
+      var ztt_tip = document.getElementById("ztt_tip");
+      ztt_grid.innerHTML = "";
+
+      if (!ztt_poems || ztt_poems.length === 0) {
+        ztt_tip.hidden = false;
+        ztt_tip.textContent = "db.json 中没有找到 poems 数据。";
+        return;
+      }
+
+      ztt_poems.forEach(function (ztt_poem) {
+        ztt_grid.appendChild(ztt_createCard(ztt_poem));
+      });
+    }
+
+    // 函数功能：在页面上显示一条错误提示
+    function ztt_showError(ztt_message) {
+      var ztt_tip = document.getElementById("ztt_tip");
+      ztt_tip.hidden = false;
+      ztt_tip.textContent = ztt_message;
+    }
+
+    // 函数功能：请求 3004 端口的 /api/poems 接口获取诗词数据并渲染
+    async function ztt_loadPoems() {
+      try {
+        var ztt_response = await fetch("/api/poems");
+        if (!ztt_response.ok) {
+          throw new Error("接口返回状态码 " + ztt_response.status);
+        }
+        var ztt_data = await ztt_response.json();
+        ztt_renderPoems(ztt_data.poems);
+      } catch (ztt_error) {
+        ztt_showError(
+          "数据加载失败：" + ztt_error.message +
+          "。请先在项目根目录运行 node db/server.js，再访问 http://localhost:3004/poems.html"
+        );
+      }
+    }
+
+    // 函数功能：页面结构加载完成后开始拉取数据
+    document.addEventListener("DOMContentLoaded", ztt_loadPoems);
+  </script>
+</body>
+</html>

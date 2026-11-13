@@ -1,0 +1,16 @@
+# 系统 / IDE
+.DS_Store
+Thumbs.db
+.vscode/
+.trae/
+.trae-cn/
+
+# 分享打包临时产物
+.trae-html-share-packages/
+*.zip
+
+# swiper 库本身体积不大，直接入库（纯静态作业走 file:// 可运行）
+# docs 验证截图入库，便于 review
+
+# 日志
+*.log

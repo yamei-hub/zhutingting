@@ -1,0 +1,602 @@
+<!DOCTYPE html>
+<!--
+  作者：朱婷婷
+  建立时间：2026-11-13
+  使用大模型：DeepSeek-V4.1-Flash
+  功能名称：图标样本册卷二 · Lucide 内联 SVG 图标艺术品牌展示页
+-->
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>青爻 · 图标样本册 卷二 / 矢量图标</title>
+<style>
+  :root {
+    --ztt_ground: #17141d;
+    --ztt_ground_soft: #221d2b;
+    --ztt_bone: #efe6d8;
+    --ztt_bone_soft: rgba(239, 230, 216, 0.66);
+    --ztt_amber: #d8965f;
+    --ztt_mist: #8fb0b5;
+    --ztt_rule: rgba(239, 230, 216, 0.16);
+    --ztt_serif: "Songti SC", "STSong", "Noto Serif SC", "Source Han Serif SC", "SimSun", serif;
+    --ztt_sans: "PingFang SC", "Microsoft YaHei", "Segoe UI", sans-serif;
+    --ztt_mono: "Consolas", "SFMono-Regular", "Menlo", monospace;
+  }
+
+  * {
+    box-sizing: border-box;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    margin: 0;
+    background: var(--ztt_ground);
+    color: var(--ztt_bone);
+    font-family: var(--ztt_sans);
+    font-size: 16px;
+    line-height: 1.75;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .ztt_frame {
+    display: grid;
+    grid-template-columns: 78px minmax(0, 1fr);
+  }
+
+  .ztt_spine {
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    border-right: 1px solid var(--ztt_rule);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    padding: 26px 0 22px;
+  }
+
+  .ztt_spine_mark {
+    width: 30px;
+    height: 30px;
+    border: 1px solid var(--ztt_bone);
+    border-radius: 50%;
+    display: grid;
+    place-items: center;
+    font-family: var(--ztt_serif);
+    font-size: 13px;
+    line-height: 1;
+  }
+
+  .ztt_spine_title {
+    writing-mode: vertical-rl;
+    font-family: var(--ztt_serif);
+    font-size: 15px;
+    letter-spacing: 0.42em;
+  }
+
+  .ztt_spine_year {
+    writing-mode: vertical-rl;
+    font-size: 11px;
+    letter-spacing: 0.22em;
+    color: var(--ztt_bone_soft);
+  }
+
+  .ztt_main {
+    padding: 0 56px;
+  }
+
+  .ztt_topbar {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 20px;
+    padding: 26px 0;
+    border-bottom: 1px solid var(--ztt_rule);
+    font-size: 13px;
+    color: var(--ztt_bone_soft);
+  }
+
+  .ztt_topbar strong {
+    font-family: var(--ztt_serif);
+    font-size: 15px;
+    font-weight: 400;
+    letter-spacing: 0.16em;
+    color: var(--ztt_bone);
+  }
+
+  .ztt_topbar_nav {
+    display: flex;
+    gap: 22px;
+  }
+
+  .ztt_topbar_nav a {
+    color: var(--ztt_bone_soft);
+    text-decoration: none;
+    border-bottom: 1px solid transparent;
+    padding-bottom: 2px;
+    transition: color 0.25s ease, border-color 0.25s ease;
+  }
+
+  .ztt_topbar_nav a:hover {
+    color: var(--ztt_amber);
+    border-bottom-color: var(--ztt_amber);
+  }
+
+  .ztt_hero {
+    display: grid;
+    grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr);
+    align-items: center;
+    gap: 40px;
+    padding: 74px 0 68px;
+    border-bottom: 1px solid var(--ztt_rule);
+  }
+
+  .ztt_kicker {
+    font-size: 12px;
+    letter-spacing: 0.3em;
+    color: var(--ztt_mist);
+    margin: 0 0 22px;
+  }
+
+  .ztt_hero h1 {
+    font-family: var(--ztt_serif);
+    font-size: clamp(3.2rem, 7vw, 6.2rem);
+    font-weight: 400;
+    line-height: 1.02;
+    letter-spacing: 0.03em;
+    margin: 0;
+  }
+
+  .ztt_hero h1 em {
+    font-style: normal;
+    color: var(--ztt_amber);
+  }
+
+  .ztt_lead {
+    max-width: 34em;
+    margin: 28px 0 0;
+    color: var(--ztt_bone_soft);
+    font-size: 15.5px;
+    line-height: 1.95;
+  }
+
+  .ztt_hero_meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px 26px;
+    margin-top: 30px;
+    font-size: 12.5px;
+    color: var(--ztt_bone_soft);
+    letter-spacing: 0.08em;
+  }
+
+  .ztt_glyph_stage {
+    position: relative;
+    display: grid;
+    place-items: center;
+    min-height: 320px;
+  }
+
+  .ztt_glyph_stage::before {
+    content: "";
+    position: absolute;
+    inset: 10% 8%;
+    border: 1px solid var(--ztt_rule);
+    border-radius: 50%;
+  }
+
+  .ztt_glyph_stage svg {
+    width: 230px;
+    height: 230px;
+    stroke-width: 0.6;
+    color: var(--ztt_bone);
+  }
+
+  .ztt_section {
+    padding: 62px 0;
+    border-bottom: 1px solid var(--ztt_rule);
+  }
+
+  .ztt_section_head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 12px 30px;
+    margin-bottom: 36px;
+  }
+
+  .ztt_section_head h2 {
+    font-family: var(--ztt_serif);
+    font-size: clamp(1.6rem, 2.4vw, 2.3rem);
+    font-weight: 400;
+    margin: 0;
+    letter-spacing: 0.04em;
+  }
+
+  .ztt_section_head p {
+    margin: 0;
+    max-width: 30em;
+    color: var(--ztt_bone_soft);
+    font-size: 14px;
+  }
+
+  /* 描边四级：同一份路径，只改 stroke-width */
+  .ztt_strokes {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    border-top: 1px solid var(--ztt_bone);
+  }
+
+  .ztt_stroke_item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 18px;
+    padding: 34px 16px 24px;
+    border-right: 1px solid var(--ztt_rule);
+    border-bottom: 1px solid var(--ztt_rule);
+    transition: background 0.3s ease;
+  }
+
+  .ztt_stroke_item:last-child {
+    border-right: none;
+  }
+
+  .ztt_stroke_item svg {
+    width: 84px;
+    height: 84px;
+    color: var(--ztt_mist);
+  }
+
+  .ztt_stroke_item span {
+    font-size: 12px;
+    letter-spacing: 0.14em;
+    color: var(--ztt_bone_soft);
+  }
+
+  .ztt_stroke_item:hover {
+    background: var(--ztt_ground_soft);
+  }
+
+  .ztt_stroke_item:hover svg {
+    color: var(--ztt_amber);
+  }
+
+  .ztt_s06 svg,
+  .ztt_s06 { stroke-width: 0.6; }
+  .ztt_s10 svg,
+  .ztt_s10 { stroke-width: 1; }
+  .ztt_s18 svg,
+  .ztt_s18 { stroke-width: 1.8; }
+  .ztt_s26 svg,
+  .ztt_s26 { stroke-width: 2.6; }
+
+  .ztt_table {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    border-top: 1px solid var(--ztt_bone);
+    border-left: 1px solid var(--ztt_rule);
+  }
+
+  .ztt_cell {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    padding: 28px 20px 22px;
+    border-right: 1px solid var(--ztt_rule);
+    border-bottom: 1px solid var(--ztt_rule);
+    transition: background 0.32s ease;
+  }
+
+  .ztt_cell svg {
+    width: 30px;
+    height: 30px;
+    stroke-width: 1.25;
+    color: var(--ztt_bone);
+    transition: color 0.32s ease, transform 0.32s ease;
+  }
+
+  .ztt_cell_name {
+    font-size: 12.5px;
+    letter-spacing: 0.1em;
+    color: var(--ztt_bone_soft);
+  }
+
+  .ztt_cell:hover {
+    background: var(--ztt_bone);
+  }
+
+  .ztt_cell:hover svg {
+    color: var(--ztt_ground);
+    transform: translateY(-3px);
+  }
+
+  .ztt_cell:hover .ztt_cell_name {
+    color: rgba(23, 20, 29, 0.62);
+  }
+
+  /* 颜色继承 */
+  .ztt_inks {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 1px;
+    background: var(--ztt_rule);
+    border: 1px solid var(--ztt_rule);
+  }
+
+  .ztt_ink_card {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 22px;
+    padding: 34px 26px 28px;
+    background: var(--ztt_ground);
+  }
+
+  .ztt_ink_card svg {
+    width: 56px;
+    height: 56px;
+    stroke-width: 1.1;
+    transition: transform 0.32s ease;
+  }
+
+  .ztt_ink_card:hover svg {
+    transform: rotate(-8deg) scale(1.06);
+  }
+
+  .ztt_ink_name {
+    font-size: 12.5px;
+    letter-spacing: 0.12em;
+    color: var(--ztt_bone_soft);
+  }
+
+  .ztt_amber {
+    color: var(--ztt_amber);
+  }
+
+  .ztt_mist {
+    color: var(--ztt_mist);
+  }
+
+  .ztt_bone {
+    color: var(--ztt_bone);
+  }
+
+  .ztt_usage {
+    display: grid;
+    grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+    gap: 44px;
+    align-items: start;
+  }
+
+  .ztt_usage h2 {
+    font-family: var(--ztt_serif);
+    font-size: clamp(1.6rem, 2.4vw, 2.2rem);
+    font-weight: 400;
+    margin: 0 0 18px;
+  }
+
+  .ztt_usage p {
+    margin: 0 0 14px;
+    color: var(--ztt_bone_soft);
+    font-size: 14.5px;
+  }
+
+  .ztt_code {
+    border-left: 2px solid var(--ztt_amber);
+    background: rgba(239, 230, 216, 0.06);
+    padding: 22px 24px;
+    font-family: var(--ztt_mono);
+    font-size: 13px;
+    line-height: 2;
+    color: var(--ztt_bone);
+    overflow-x: auto;
+    white-space: pre;
+  }
+
+  .ztt_foot {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 18px 40px;
+    padding: 34px 0 56px;
+    font-size: 12.5px;
+    color: var(--ztt_bone_soft);
+  }
+
+  .ztt_foot a {
+    color: var(--ztt_bone);
+    text-decoration: none;
+    border-bottom: 1px solid var(--ztt_rule);
+  }
+
+  .ztt_foot a:hover {
+    color: var(--ztt_amber);
+    border-bottom-color: var(--ztt_amber);
+  }
+
+  @media (max-width: 900px) {
+    .ztt_frame {
+      grid-template-columns: 1fr;
+    }
+
+    .ztt_spine {
+      display: none;
+    }
+
+    .ztt_main {
+      padding: 0 22px;
+    }
+
+    .ztt_hero,
+    .ztt_usage {
+      grid-template-columns: 1fr;
+    }
+
+    .ztt_glyph_stage {
+      min-height: 220px;
+    }
+
+    .ztt_glyph_stage svg {
+      width: 170px;
+      height: 170px;
+    }
+
+    .ztt_table,
+    .ztt_strokes,
+    .ztt_inks {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .ztt_stroke_item:nth-child(2) {
+      border-right: none;
+    }
+  }
+</style>
+</head>
+<body>
+  <div class="ztt_frame">
+    <aside class="ztt_spine">
+      <div class="ztt_spine_mark">爻</div>
+      <div class="ztt_spine_title">青爻 · 图标样本册</div>
+      <div class="ztt_spine_year">二〇二六</div>
+    </aside>
+
+    <div class="ztt_main">
+      <header class="ztt_topbar">
+        <strong>卷二 · 矢量图标</strong>
+        <nav class="ztt_topbar_nav">
+          <a href="./iconfont-1.html">卷一</a>
+          <a href="./iconfont-2.html">卷二</a>
+          <a href="./index.html">返回索引</a>
+        </nav>
+      </header>
+
+      <section class="ztt_hero">
+        <div>
+          <p class="ztt_kicker">字体与图标样本册</p>
+          <h1>笔画<br><em>即代码</em></h1>
+          <p class="ztt_lead">
+            Lucide 把每一枚图标写成一段路径数据，页面拿到的是真正的 SVG。
+            描边粗细、颜色、尺寸都可以直接用 CSS 改写，放大到任何倍率都不会失去边缘。
+            卷二收录二十六枚图标，全部为内联 SVG，不再依赖字体文件。
+          </p>
+          <div class="ztt_hero_meta">
+            <span>来源 · Lucide 0.469.0</span>
+            <span>方式 · 内联 SVG</span>
+            <span>本地目录 · cdn</span>
+          </div>
+        </div>
+
+        <div class="ztt_glyph_stage" aria-hidden="true">
+          <i data-lucide="aperture"></i>
+        </div>
+      </section>
+
+      <section class="ztt_section">
+        <div class="ztt_section_head">
+          <h2>一处路径，四级描边</h2>
+          <p>同一枚光圈，只改 stroke-width，笔画的性格就变了：0.6 像铅笔稿，2.6 像木刻。</p>
+        </div>
+
+        <div class="ztt_strokes">
+          <div class="ztt_stroke_item ztt_s06">
+            <i data-lucide="aperture"></i>
+            <span>0.6 · 铅笔稿</span>
+          </div>
+          <div class="ztt_stroke_item ztt_s10">
+            <i data-lucide="aperture"></i>
+            <span>1.0 · 中性笔</span>
+          </div>
+          <div class="ztt_stroke_item ztt_s18">
+            <i data-lucide="aperture"></i>
+            <span>1.8 · 马克笔</span>
+          </div>
+          <div class="ztt_stroke_item ztt_s26">
+            <i data-lucide="aperture"></i>
+            <span>2.6 · 木刻刀</span>
+          </div>
+        </div>
+      </section>
+
+      <section class="ztt_section">
+        <div class="ztt_section_head">
+          <h2>十六枚线条</h2>
+          <p>统一的 24 像素画布、统一的圆角与端点。鼠标移入，格子翻成骨白，线条转为墨色。</p>
+        </div>
+
+        <div class="ztt_table">
+          <div class="ztt_cell"><i data-lucide="house"></i><span class="ztt_cell_name">house · 首页</span></div>
+          <div class="ztt_cell"><i data-lucide="compass"></i><span class="ztt_cell_name">compass · 指南</span></div>
+          <div class="ztt_cell"><i data-lucide="palette"></i><span class="ztt_cell_name">palette · 调色</span></div>
+          <div class="ztt_cell"><i data-lucide="pen-tool"></i><span class="ztt_cell_name">pen-tool · 钢笔</span></div>
+          <div class="ztt_cell"><i data-lucide="layers"></i><span class="ztt_cell_name">layers · 图层</span></div>
+          <div class="ztt_cell"><i data-lucide="swatch-book"></i><span class="ztt_cell_name">swatch-book · 色卡</span></div>
+          <div class="ztt_cell"><i data-lucide="box"></i><span class="ztt_cell_name">box · 立方</span></div>
+          <div class="ztt_cell"><i data-lucide="feather"></i><span class="ztt_cell_name">feather · 羽毛</span></div>
+          <div class="ztt_cell"><i data-lucide="wand-sparkles"></i><span class="ztt_cell_name">wand-sparkles · 魔杖</span></div>
+          <div class="ztt_cell"><i data-lucide="camera"></i><span class="ztt_cell_name">camera · 相机</span></div>
+          <div class="ztt_cell"><i data-lucide="spline"></i><span class="ztt_cell_name">spline · 曲线</span></div>
+          <div class="ztt_cell"><i data-lucide="scissors"></i><span class="ztt_cell_name">scissors · 剪刀</span></div>
+          <div class="ztt_cell"><i data-lucide="stamp"></i><span class="ztt_cell_name">stamp · 印记</span></div>
+          <div class="ztt_cell"><i data-lucide="shapes"></i><span class="ztt_cell_name">shapes · 形状</span></div>
+          <div class="ztt_cell"><i data-lucide="square-dashed"></i><span class="ztt_cell_name">square-dashed · 选区</span></div>
+          <div class="ztt_cell"><i data-lucide="pipette"></i><span class="ztt_cell_name">pipette · 取色</span></div>
+        </div>
+      </section>
+
+      <section class="ztt_section">
+        <div class="ztt_section_head">
+          <h2>颜色跟着文字走</h2>
+          <p>SVG 的描边默认取 currentColor，所以给外层一个 color，线条就换一种墨。</p>
+        </div>
+
+        <div class="ztt_inks">
+          <div class="ztt_ink_card ztt_amber">
+            <i data-lucide="sparkles"></i>
+            <span class="ztt_ink_name">琥珀 · #d8965f</span>
+          </div>
+          <div class="ztt_ink_card ztt_mist">
+            <i data-lucide="orbit"></i>
+            <span class="ztt_ink_name">雾青 · #8fb0b5</span>
+          </div>
+          <div class="ztt_ink_card ztt_bone">
+            <i data-lucide="moon-star"></i>
+            <span class="ztt_ink_name">骨白 · #efe6d8</span>
+          </div>
+        </div>
+      </section>
+
+      <section class="ztt_section" style="border-bottom: none;">
+        <div class="ztt_usage">
+          <div>
+            <h2>用法</h2>
+            <p>先用 data-lucide 标记图标名，页面加载后由本地脚本把标记替换成内联 SVG。</p>
+            <p>脚本、图标数据都放在 <span style="font-family: var(--ztt_mono);">cdn</span> 目录中，初始化逻辑位于 <span style="font-family: var(--ztt_mono);">js/ztt_lucide.js</span>。</p>
+          </div>
+          <pre class="ztt_code">&lt;script src="./cdn/lucide.min.js"&gt;&lt;/script&gt;
+
+&lt;i data-lucide="house"&gt;&lt;/i&gt;
+&lt;i data-lucide="aperture"&gt;&lt;/i&gt;
+
+&lt;script src="./js/ztt_lucide.js"&gt;&lt;/script&gt;</pre>
+        </div>
+      </section>
+
+      <footer class="ztt_foot">
+        <span>青爻工作室 · 图标样本册 卷二 / 矢量图标</span>
+        <span>图标 Lucide 0.469.0 · ISC 许可</span>
+        <span><a href="./iconfont-1.html">翻阅卷一 · 字体</a> ／ <a href="./index.html">返回索引</a></span>
+      </footer>
+    </div>
+  </div>
+
+  <script src="./cdn/lucide.min.js"></script>
+  <script src="./js/ztt_lucide.js"></script>
+</body>
+</html>

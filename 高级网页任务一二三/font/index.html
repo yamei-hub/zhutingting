@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<link rel="icon" href="data:,">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>汽车导购页面复刻 - 朱婷婷</title>
+    <style>
+        /* 朱婷婷 样式开始 */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "Microsoft Yahei", sans-serif;
+        }
+        .ztt-wrap {
+            width: 1200px;
+            margin: 30px auto;
+            border: 1px solid #eee;
+            padding: 10px;
+        }
+        .ztt-tab-box {
+            display: flex;
+            border-bottom: 2px solid #cad6e2;
+            margin-bottom: 20px;
+        }
+        .ztt-tab-item {
+            padding: 12px 32px;
+            font-size: 32px;
+            color: #333;
+            cursor: pointer;
+            position: relative;
+        }
+        .ztt-tab-item.ztt-active {
+            color: #004499;
+        }
+        .ztt-tab-item.ztt-active::after {
+            content: "";
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background-color: #004499;
+        }
+        .ztt-red-title {
+            font-size: 40px;
+            color: #dd2222;
+            font-weight: bold;
+            margin: 20px 0;
+            letter-spacing: 2px;
+        }
+        .ztt-list-item {
+            font-size: 30px;
+            color: #003377;
+            line-height: 2.2;
+            display: flex;
+            justify-content: space-between;
+        }
+        .ztt-list-item::before {
+            content: "·";
+            margin-right: 8px;
+        }
+        .ztt-date-text {
+            color: #888;
+        }
+        .ztt-panel {
+            display: none;
+        }
+        .ztt-panel.ztt-show {
+            display: block;
+        }
+        /* 朱婷婷 样式结束 */
+    </style>
+</head>
+<body>
+    <!-- 返回课堂实践目录 -->
+    <div style="max-width:1200px;margin:18px auto 0;padding:0 10px;">
+        <a href="../index.html" style="display:inline-block;text-decoration:none;color:#176b58;font-size:14px;font-weight:bold;border:1px solid #d7e1dc;border-radius:999px;padding:8px 20px;background:#fff;">← 返回课堂实践目录</a>
+    </div>
+    <div class="ztt-wrap">
+        <!-- 朱婷婷 标签栏 -->
+        <div class="ztt-tab-box">
+            <div class="ztt-tab-item ztt-active" data-tab="ztt-daogou">导购</div>
+            <div class="ztt-tab-item" data-tab="ztt-3-9">3-9万</div>
+            <div class="ztt-tab-item" data-tab="ztt-9-17">9-17万</div>
+            <div class="ztt-tab-item" data-tab="ztt-17-42">17-42万</div>
+            <div class="ztt-tab-item" data-tab="ztt-suv">SUV</div>
+        </div>
+        <!-- 朱婷婷 导购面板 -->
+        <div class="ztt-panel ztt-show" id="ztt-daogou">
+            <div class="ztt-red-title">B级品质满足A级需求 路盛E70亮点详解析</div>
+            <div class="ztt-list-item">购车必看 凯迪拉克XTS领先型28T深度体验 <span class="ztt-date-text">12/20</span></div>
+            <div class="ztt-list-item">爸爸去哪？亲子出游适合车型和注意事项 <span class="ztt-date-text">12/20</span></div>
+            <div class="ztt-list-item">推荐：X1等城市四驱Style+经济省油的SUV <span class="ztt-date-text">12/19</span></div>
+            <div class="ztt-list-item">全景天窗/保养便利 30万办齐四驱SUV推荐 <span class="ztt-date-text">12/19</span></div>
+            <div class="ztt-list-item">全民摇号时代?六款低价占号必备车型推荐 <span class="ztt-date-text">12/19</span></div>
+            <div class="ztt-list-item">最高暴降20万！奥迪Q5等年底特惠SUV盘点 <span class="ztt-date-text">12/18</span></div>
+        </div>
+        <!-- 朱婷婷 3-9万面板 -->
+        <div class="ztt-panel" id="ztt-3-9">
+            <div class="ztt-red-title">最低仅4.6万元起 超低价SUV购买价值点评</div>
+            <div class="ztt-list-item">全民摇号时代?六款低价占号必备车型推荐 <span class="ztt-date-text">12/19</span></div>
+            <div class="ztt-list-item">凌派/观致3等 2013年全新热门家用车盘点 <span class="ztt-date-text">12/11</span></div>
+            <div class="ztt-list-item">坚持低价高配路线！静态评测华泰路盛E70 <span class="ztt-date-text">12/09</span></div>
+            <div class="ztt-list-item">买车先看销量 10月份销量前十名轿车盘点 <span class="ztt-date-text">11/29</span></div>
+            <div class="ztt-list-item">抄底正当时 车展后清仓优惠老款车型推荐 <span class="ztt-date-text">11/28</span></div>
+            <div class="ztt-list-item">土豪气质 细数车展那些低价车上的“神器” <span class="ztt-date-text">11/27</span></div>
+        </div>
+        <!-- 朱婷婷 9-17万面板 -->
+        <div class="ztt-panel" id="ztt-9-17">
+            <div class="ztt-red-title">15万级降价车谁更值 预算/油耗/空间较量</div>
+            <div class="ztt-list-item">爸爸去哪？亲子出游适合车型和注意事项 <span class="ztt-date-text">12/20</span></div>
+            <div class="ztt-list-item">最高暴降20万！奥迪Q5等年底特惠SUV盘点 <span class="ztt-date-text">12/18</span></div>
+            <div class="ztt-list-item">配侧气帘值得肯定！传祺GA3碰撞试验图解 <span class="ztt-date-text">12/18</span></div>
+            <div class="ztt-list-item">高尔夫7≠两厢版速腾 配置/动力差异解读 <span class="ztt-date-text">12/18</span></div>
+            <div class="ztt-list-item">花小钱也能养SUV 翼博等入门SUV使用手册 <span class="ztt-date-text">12/17</span></div>
+            <div class="ztt-list-item">最高优惠4.3万 十款15万SUV年末购买推荐 <span class="ztt-date-text">12/16</span></div>
+        </div>
+        <!-- 朱婷婷 17-42万面板 -->
+        <div class="ztt-panel" id="ztt-17-42">
+            <div class="ztt-red-title">改变品牌的未来 认识豪华品牌最便宜车型</div>
+            <div class="ztt-list-item">爸爸去哪？亲子出游适合车型和注意事项 <span class="ztt-date-text">12/20</span></div>
+            <div class="ztt-list-item">推荐：X1等城市四驱Style+经济省油的SUV <span class="ztt-date-text">12/19</span></div>
+            <div class="ztt-list-item">全景天窗/保养便利 30万办齐四驱SUV推荐 <span class="ztt-date-text">12/19</span></div>
+            <div class="ztt-list-item">最高暴降20万！奥迪Q5等年底特惠SUV盘点 <span class="ztt-date-text">12/18</span></div>
+            <div class="ztt-list-item">比拼硬实力 8款低配四驱紧凑SUV性能点评 <span class="ztt-date-text">12/18</span></div>
+            <div class="ztt-list-item">新蒙迪欧/雅阁等！盘点2013中级车大变脸 <span class="ztt-date-text">12/17</span></div>
+        </div>
+        <!-- 朱婷婷 SUV面板 -->
+        <div class="ztt-panel" id="ztt-suv">
+            <div class="ztt-red-title">改变品牌的未来 认识豪华品牌最便宜车型</div>
+            <div class="ztt-list-item">推荐：X1等城市四驱Style+经济省油的SUV <span class="ztt-date-text">12/19</span></div>
+            <div class="ztt-list-item">全景天窗/保养便利 30万办齐四驱SUV推荐 <span class="ztt-date-text">12/19</span></div>
+            <div class="ztt-list-item">最高暴降20万！奥迪Q5等年底特惠SUV盘点 <span class="ztt-date-text">12/18</span></div>
+            <div class="ztt-list-item">比拼硬实力 8款低配四驱紧凑SUV性能点评 <span class="ztt-date-text">12/18</span></div>
+            <div class="ztt-list-item">花小钱也能养SUV 翼博等入门SUV使用手册 <span class="ztt-date-text">12/17</span></div>
+            <div class="ztt-list-item">最高优惠4.3万 十款15万SUV年末购买推荐 <span class="ztt-date-text">12/16</span></div>
+        </div>
+    </div>
+    <script>
+        // 朱婷婷 JS 标签切换逻辑
+        const zttTabItems = document.querySelectorAll('.ztt-tab-item');
+        const zttPanels = document.querySelectorAll('.ztt-panel');
+        zttTabItems.forEach(item => {
+            item.addEventListener('click', () => {
+                // 清除全部激活
+                zttTabItems.forEach(t => t.classList.remove('ztt-active'));
+                zttPanels.forEach(p => p.classList.remove('ztt-show'));
+                // 设置当前激活
+                item.classList.add('ztt-active');
+                const zttTargetId = item.getAttribute('data-tab');
+                document.getElementById(zttTargetId).classList.add('ztt-show');
+            })
+        })
+    </script>
+</body>
+</html>
