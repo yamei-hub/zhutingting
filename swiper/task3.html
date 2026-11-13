@@ -251,7 +251,59 @@ var ztt_main = new Swiper('#zttMain', {
   <footer>任务三 · 综合创作 + 技术答辩 · 大国重器光影展 · 高级网页设计 · 朱婷婷（24002120525） · 2026-2027-1</footer>
 </div>
 
-<!-- 任务三脚本已外置，变量统一 ztt_ 前缀 -->
-<script src="js/ztt-task3.js"></script>
+<script>
+  // ══════════════════════════════════════════════════════════
+  //  任务三作答区 · 作者：朱婷婷（24002120525），变量 ztt_ 前缀
+  // ══════════════════════════════════════════════════════════
+
+  // 先创建缩略图实例
+  var ztt_thumb = new Swiper('#zttThumbs', {
+    spaceBetween: 8,
+    slidesPerView: 'auto',
+    freeMode: true,
+    watchSlidesProgress: true,
+    slideToClickedSlide: true
+  });
+
+  // 再创建主图实例（coverflow 大角度旋转），thumbs 绑定缩略图实例对象
+  var ztt_main = new Swiper('#zttMain', {
+    effect: 'coverflow',
+    centeredSlides: true,
+    slidesPerView: 'auto',
+    spaceBetween: 24,
+    coverflowEffect: {
+      rotate: 55,
+      stretch: 0,
+      depth: 260,
+      modifier: 1,
+      slideShadows: true
+    },
+    navigation: { nextEl: '#zttMainNext', prevEl: '#zttMainPrev' },
+    // 四项课堂外能力：键盘 / 滚轮 / 双击缩放 / 视差
+    keyboard: { enabled: true, onlyInViewport: true },
+    mousewheel: { enabled: true, releaseOnEdges: true },
+    zoom: { enabled: true, maxRatio: 3, minRatio: 1 },
+    parallax: true,
+    thumbs: { swiper: ztt_thumb }
+  });
+
+  // 读数：当前主图索引 / 点亮缩略图索引 / 同步状态
+  function ztt_syncReadout(){
+    var mi = ztt_main.realIndex;
+    var active = null;
+    ztt_thumb.slides.forEach(function(s){
+      if(s.classList.contains('swiper-slide-thumb-active')) active = s;
+    });
+    var ti = active ? ztt_thumb.slides.indexOf(active) : mi;
+    document.getElementById('zttMainIdx').textContent = mi + 1;
+    document.getElementById('zttThumbIdx').textContent = ti + 1;
+    var state = document.getElementById('zttSyncState');
+    if(mi === ti){ state.textContent = '已同步'; state.className = 'ztt-good'; }
+    else{ state.textContent = '跟随中'; state.className = ''; }
+  }
+  ztt_main.on('slideChange', ztt_syncReadout);
+  ztt_thumb.on('slideChange', ztt_syncReadout);
+  ztt_syncReadout();
+</script>
 </body>
 </html>
