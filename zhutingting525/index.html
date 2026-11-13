@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<!--
+  作者：朱婷婷
+  建立时间：2026-11-04
+  使用大模型：GLM
+  功能名称：汽车导购 Tab 选项卡页面（一比一还原课堂测试效果图），
+            包含 导购 / 3-9万 / 9-17万 / 17-42万 / SUV 五个选项卡，
+            默认选中"导购"，JS 外部引用且可复用。
+            规则：所有 CSS 类名、id 均以 ztt 开头。
+-->
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>汽车导购选项卡 - 朱婷婷</title>
+  <!-- 外部引入 css 文件夹中的样式文件 -->
+  <link rel="stylesheet" href="./css/ztt.css" />
+</head>
+<body>
+  <!-- zttTabBox：选项卡组件最外层容器 -->
+  <div class="zttTabBox" id="zttTabBox">
+    <!-- zttTabNav：选项卡导航栏 -->
+    <div class="zttTabNav" id="zttTabNav">
+      <button type="button" class="zttTabBtn zttActive">导购</button>
+      <button type="button" class="zttTabBtn">3-9万</button>
+      <button type="button" class="zttTabBtn">9-17万</button>
+      <button type="button" class="zttTabBtn">17-42万</button>
+      <button type="button" class="zttTabBtn">SUV</button>
+    </div>
+
+    <!-- zttTabContent：选项卡内容区，每个面板与导航按钮一一对应 -->
+    <div class="zttTabContent" id="zttTabContent">
+      <!-- 面板一：导购（默认选中） -->
+      <div class="zttTabPanel zttActive">
+        <h2 class="zttPanelTitle"><a href="#">B级品质满足A级需求 路盛E70亮点详解析</a></h2>
+        <ul class="zttNewsList">
+          <li><a href="#">购车必看 凯迪拉克XTS领先型28T深度体验</a><span class="zttDate">12/20</span></li>
+          <li><a href="#">爸爸去哪？亲子出游适合车型和注意事项</a><span class="zttDate">12/20</span></li>
+          <li><a href="#">推荐：X1等城市四驱Style+经济省油的SUV</a><span class="zttDate">12/19</span></li>
+          <li><a href="#">全景天窗/保养便利 30万亦齐四驱SUV推荐</a><span class="zttDate">12/19</span></li>
+          <li><a href="#">全民摇号时代?六款低价占号必备车型推荐</a><span class="zttDate">12/19</span></li>
+          <li><a href="#">最高暴降20万！奥迪Q5等年底特惠SUV盘点</a><span class="zttDate">12/18</span></li>
+        </ul>
+      </div>
+
+      <!-- 面板二：3-9万 -->
+      <div class="zttTabPanel">
+        <h2 class="zttPanelTitle"><a href="#">最低仅4.6万元起 超低价SUV购买价值点评</a></h2>
+        <ul class="zttNewsList">
+          <li><a href="#">全民摇号时代?六款低价占号必备车型推荐</a><span class="zttDate">12/19</span></li>
+          <li><a href="#">凌派/观致3等 2013年全新热门家用车盘点</a><span class="zttDate">12/11</span></li>
+          <li><a href="#">坚持低价高配路线！ 静态评测华泰路盛E70</a><span class="zttDate">12/09</span></li>
+          <li><a href="#">买车先看销量 10月份销量前十名轿车盘点</a><span class="zttDate">11/29</span></li>
+          <li><a href="#">抄底正当时 车展后清仓优惠老款车型推荐</a><span class="zttDate">11/28</span></li>
+          <li><a href="#">土豪气质 细数车展那些低价车上的"神器"</a><span class="zttDate">11/27</span></li>
+        </ul>
+      </div>
+
+      <!-- 面板三：9-17万 -->
+      <div class="zttTabPanel">
+        <h2 class="zttPanelTitle"><a href="#">15万级降价车谁更值 预算/油耗/空间较大</a></h2>
+        <ul class="zttNewsList">
+          <li><a href="#">爸爸去哪？亲子出游适合车型和注意事项</a><span class="zttDate">12/20</span></li>
+          <li><a href="#">最高暴降20万！奥迪Q5等年底特惠SUV盘点</a><span class="zttDate">12/18</span></li>
+          <li><a href="#">配侧气帘值得肯定！传祺GA3碰撞试验图解</a><span class="zttDate">12/18</span></li>
+          <li><a href="#">高尔夫7≠两厢版速腾 配置/动力差异解读</a><span class="zttDate">12/18</span></li>
+          <li><a href="#">花小钱也能养SUV 翼博等入门SUV使用手册</a><span class="zttDate">12/17</span></li>
+          <li><a href="#">最高优惠4.3万 十款15万SUV年末购买推荐</a><span class="zttDate">12/16</span></li>
+        </ul>
+      </div>
+
+      <!-- 面板四：17-42万 -->
+      <div class="zttTabPanel">
+        <h2 class="zttPanelTitle"><a href="#">改变品牌的未来 认识豪华品牌最便宜车型</a></h2>
+        <ul class="zttNewsList">
+          <li><a href="#">爸爸去哪？亲子出游适合车型和注意事项</a><span class="zttDate">12/20</span></li>
+          <li><a href="#">推荐：X1等城市四驱Style+经济省油的SUV</a><span class="zttDate">12/19</span></li>
+          <li><a href="#">全景天窗/保养便利 30万亦齐四驱SUV推荐</a><span class="zttDate">12/19</span></li>
+          <li><a href="#">最高暴降20万！奥迪Q5等年底特惠SUV盘点</a><span class="zttDate">12/18</span></li>
+          <li><a href="#">比拼硬实力 8款低压四驱紧凑SUV性能点评</a><span class="zttDate">12/18</span></li>
+          <li><a href="#">新蒙迪欧/雅阁等！盘点2013中级车大变脸</a><span class="zttDate">12/17</span></li>
+        </ul>
+      </div>
+
+      <!-- 面板五：SUV（与导购面板内容相同，一比一还原效果图） -->
+      <div class="zttTabPanel">
+        <h2 class="zttPanelTitle"><a href="#">B级品质满足A级需求 路盛E70亮点详解析</a></h2>
+        <ul class="zttNewsList">
+          <li><a href="#">购车必看 凯迪拉克XTS领先型28T深度体验</a><span class="zttDate">12/20</span></li>
+          <li><a href="#">爸爸去哪？亲子出游适合车型和注意事项</a><span class="zttDate">12/20</span></li>
+          <li><a href="#">推荐：X1等城市四驱Style+经济省油的SUV</a><span class="zttDate">12/19</span></li>
+          <li><a href="#">全景天窗/保养便利 30万亦齐四驱SUV推荐</a><span class="zttDate">12/19</span></li>
+          <li><a href="#">全民摇号时代?六款低价占号必备车型推荐</a><span class="zttDate">12/19</span></li>
+          <li><a href="#">最高暴降20万！奥迪Q5等年底特惠SUV盘点</a><span class="zttDate">12/18</span></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- 外部引入 js 文件夹中的脚本文件 -->
+  <script src="./js/ztt.js"></script>
+</body>
+</html>
