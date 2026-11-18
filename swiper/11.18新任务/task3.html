@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<!--
+  作者：朱婷婷
+  建立时间：2026-11-18
+  使用大模型：DeepSeek-V4.1-Flash
+  功能名称：任务三 · 图片查看器：双指缩放（1x～4x）+ 双击 1x/2x 切换 + 放大后单指拖动
+-->
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="format-detection" content="telephone=no">
+<link rel="icon" href="data:,">
+<title>任务三 · 图片查看器 · 朱婷婷</title>
+<link rel="stylesheet" href="css/ztt-mobile.css">
+</head>
+<body>
+<div class="ztt-wrap">
+
+  <div class="ztt-nav">
+    <a href="index.html">← 任务目录</a>
+    <a href="task2.html">← 任务二</a>
+    <span class="ztt-nav-here">任务三 · 图片查看器</span>
+  </div>
+
+  <div class="ztt-head">
+    <span class="ztt-badge">任 务 三 · ★★★ 多 指 手 势</span>
+    <h1>图片查看器<br><b>双指缩放 · 双击放大 · 拖动</b></h1>
+    <p>请用手机打开：双指缩放 1x～4x，双击在 1x / 2x 之间切换，放大后单指拖动看细节，缩回 1x 自动居中。
+    关键在两件事：<b>以两指中点为缩放基准</b>（图片不“跳”），以及<b>每帧都把位移限制在边界内</b>。</p>
+  </div>
+
+  <div class="ztt-sec">
+    <div class="ztt-sec-head">
+      <span class="ztt-no">1</span>
+      <h2>图片查看器<small>双指缩放请用手机；电脑上可双击体验 1x / 2x</small></h2>
+    </div>
+
+    <div class="ztt-viewer" id="zttViewer3">
+      <img id="zttImg3" src="imgs/ztt-task3-food.jpg" alt="中华家常菜：宫保鸡丁、清蒸鲈鱼、番茄炒蛋与小笼包" draggable="false">
+      <span class="ztt-scale-badge" id="zttScale3">1.0x</span>
+      <div class="ztt-drag-hint" id="zttDragHint3">先双击 / 双指放大，再拖动</div>
+      <div class="ztt-viewer-tip">双指缩放 1x～4x · 双击 1x / 2x · 放大后单指拖动</div>
+    </div>
+
+    <div class="ztt-btn-row">
+      <button class="ztt-btn ztt-ghost" id="zttReset3" type="button">复位到 1x</button>
+    </div>
+
+    <p class="ztt-txt">图片：AI 生成的中式家常菜 —— 宫保鸡丁、清蒸鲈鱼、番茄炒蛋与小笼包。放大后可看清花生与干辣椒、鱼身上的葱姜丝、蛋花和蒸笼的竹纹。</p>
+
+    <div class="ztt-tip">
+      <b>操作提示：</b>双指张开放大、捏合缩小；放到 2x 后单指拖动查看局部（比如鱼身上的葱姜丝、蒸笼里的汤包）；双击一下放大到 2x、再双击回到 1x 并自动居中。
+      左上角的 <code>1.0x</code> 是实时缩放比例，方便验收时对照。
+    </div>
+  </div>
+
+  <div class="ztt-sec">
+    <div class="ztt-sec-head">
+      <span class="ztt-no">2</span>
+      <h2>关键实现<small>答辩重点：为什么缩放“不跳”</small></h2>
+    </div>
+    <div class="ztt-scroll">
+      <table class="ztt-table">
+        <thead>
+          <tr><th>要点</th><th>做法</th><th>原因</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>容器</td>
+            <td><code>overflow:hidden</code> + <code>touch-action:none</code> + <code>user-select:none</code></td>
+            <td>手势全部归自己管，阻止整页缩放与长按选中</td>
+          </tr>
+          <tr>
+            <td>双指距离</td>
+            <td><code>Math.hypot(x2-x1, y2-y1)</code>，用同一套 client 坐标</td>
+            <td>勾股定理算两指直线距离，混用 client / page 会算错</td>
+          </tr>
+          <tr>
+            <td>缩放不跳</td>
+            <td>取两指中点为基准 <code>f</code>，按 <code>t新 = f - (s新/s旧)·(f - t旧)</code> 修正位移</td>
+            <td>保证“手指下方那一点”在缩放前后仍是同一点，视觉上不会突然平移</td>
+          </tr>
+          <tr>
+            <td>边界</td>
+            <td>缩放比例夹在 1～4；每帧按 <code>(内容×scale - 容器)/2</code> 夹住平移</td>
+            <td>既限制放大上限，也避免把图片拖出可视区留下黑边</td>
+          </tr>
+          <tr>
+            <td>1x 居中</td>
+            <td>scale 回到 1 时位移强制归零</td>
+            <td>缩回原大小时图片始终居中，不会“停在角落”</td>
+          </tr>
+          <tr>
+            <td>双击</td>
+            <td>两次点击间隔 &lt;300ms、位移 &lt;20px 才算双击；1x ↔ 2x，带 0.25s 过渡</td>
+            <td>用时间 + 位移双条件，避免拖动结束被误判成双击</td>
+          </tr>
+          <tr>
+            <td>旋转屏幕</td>
+            <td><code>resize</code> / <code>orientationchange</code> 后重新量容器并夹一次位移</td>
+            <td>容器尺寸变了，旧位移可能越界；比例与位置保留，状态不丢</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="ztt-sec">
+    <div class="ztt-sec-head">
+      <span class="ztt-no">▶</span>
+      <h2>演示视频<small>朱婷婷自录 · 手机真机验收录屏</small></h2>
+    </div>
+    <div class="ztt-video">
+      <video id="zttVideo3" controls playsinline preload="metadata" src="videos/task3.mp4"></video>
+      <div class="ztt-video-empty" id="zttVideoEmpty3">
+        <b>演示视频待插入</b>
+        <span>把手机录屏命名为 <code>task3.mp4</code>，放进本页同级的 <code>videos</code> 文件夹，刷新即可播放</span>
+      </div>
+    </div>
+    <p class="ztt-txt">视频内容：手机真机验收录屏 —— 双指放大、单指拖动、缩回 1x 自动居中、双击 1x / 2x 切换，左上角比例同步变化。</p>
+  </div>
+
+  <div class="ztt-sec">
+    <div class="ztt-sec-head">
+      <span class="ztt-no">3</span>
+      <h2>验收自检<small>课程给的四条验收点</small></h2>
+    </div>
+    <ul class="ztt-check">
+      <li>缩放以两指中心为基准，图片不会“跳走”</li>
+      <li>缩放到 1x 与 4x 边界时被限制，不会继续缩小 / 放大</li>
+      <li>1x 时单指拖动没有任何位移（不能拖出边界）</li>
+      <li>放大状态下旋转屏幕，比例与位置保留且不越界</li>
+      <li>双击在 1x / 2x 之间切换，带 0.25s 过渡</li>
+    </ul>
+  </div>
+
+  <div class="ztt-sec">
+    <div class="ztt-sec-head">
+      <span class="ztt-no">!</span>
+      <h2>踩坑记录<small>答辩要讲的“缩放不跳”</small></h2>
+    </div>
+    <p class="ztt-txt"><b>坑：</b>第一版只用 <code>scale</code> 缩放、不修正位移，两指一捏，图片就往左上角“窜”出去。<br>
+    <b>办法：</b>把两指中点当成“不动的锚点”。设缩放前后比例 <code>k = s新 / s旧</code>，锚点相对容器中心为 <code>f</code>，则新位移 <code>t新 = f - k·(f - t旧)</code>。这样手指按住的那一点在屏幕上原地放大，看起来就完全不跳。</p>
+    <p class="ztt-txt"><b>另一个坑：</b>双指松开一根手指时，剩余那根会突然把图片“拽”一下。<br>
+    <b>办法：</b>在 <code>touchend</code> 里判断剩余手指数，仍有一根时用当前位置重建拖动起点，状态不断档。</p>
+  </div>
+
+  <div class="ztt-back">
+    <a href="task2.html">← 任务二</a>
+    <a class="ztt-orange" href="task4.html">去任务四 →</a>
+  </div>
+
+  <footer>高级网页设计 · 朱婷婷（24002120525） · 2026-2027-1</footer>
+</div>
+
+<script src="js/ztt-task3.js"></script>
+</body>
+</html>

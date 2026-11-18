@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<!--
+  作者：朱婷婷
+  建立时间：2026-11-18
+  使用大模型：DeepSeek-V4.1-Flash
+  功能名称：任务一 · 事件侦探：触摸事件触发顺序观察与记录（事件探针 + 记录表 + 三个必答问题）
+-->
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="format-detection" content="telephone=no">
+<link rel="icon" href="data:,">
+<title>任务一 · 事件侦探 · 朱婷婷</title>
+<link rel="stylesheet" href="css/ztt-mobile.css">
+</head>
+<body>
+<div class="ztt-wrap">
+
+  <div class="ztt-nav">
+    <a href="index.html">← 任务目录</a>
+    <a href="../index.html">课堂实践目录</a>
+    <span class="ztt-nav-here">任务一 · 事件侦探</span>
+  </div>
+
+  <div class="ztt-head">
+    <span class="ztt-badge">任 务 一 · ★ 观 察 记 录</span>
+    <h1>一次拖动，<b>到底发生了什么</b></h1>
+    <p>这一关不写业务代码，只做一件事：<b>把手指的动作翻译成事件</b>。
+    用手机（或 DevTools 设备模式）在下面的黑色探针区依次做 5 种操作，日志会按真实顺序记录，然后带着数据回答三个问题。</p>
+  </div>
+
+  <div class="ztt-sec">
+    <div class="ztt-sec-head">
+      <span class="ztt-no">1</span>
+      <h2>五种操作，逐个做一遍<small>做完一种就清空一次，便于对应记录</small></h2>
+    </div>
+    <div class="ztt-tip">
+      <b>①</b> 单击一下探针区（按下即抬起）<br>
+      <b>②</b> 向上拖动约 150px 再抬起<br>
+      <b>③</b> 向左快速滑一下（甩出去）<br>
+      <b>④</b> 双指同时触摸再同时抬起（此项可选，手机上做）<br>
+      <b>⑤</b> 长按约 1 秒后抬起
+    </div>
+    <p class="ztt-txt">记录时不用抄每一行，重点看三样：<b>事件出现的先后顺序</b>、<b>一次拖动里 touchmove 出现了几次</b>、<b>click 有没有出现、出现在什么位置</b>。</p>
+  </div>
+
+  <div class="ztt-sec">
+    <div class="ztt-sec-head">
+      <span class="ztt-no">2</span>
+      <h2>事件探针<small>请用手指操作；下方 5 个计数器实时累加</small></h2>
+    </div>
+
+    <div class="ztt-pad" id="zttPad1">用手指在这里按下、拖动、抬起</div>
+
+    <div class="ztt-counters">
+      <div class="ztt-counter"><b id="zttCountStart">0</b><span>touchstart</span></div>
+      <div class="ztt-counter"><b id="zttCountMove">0</b><span>touchmove</span></div>
+      <div class="ztt-counter"><b id="zttCountEnd">0</b><span>touchend</span></div>
+      <div class="ztt-counter"><b id="zttCountCancel">0</b><span>touchcancel</span></div>
+      <div class="ztt-counter"><b id="zttCountClick">0</b><span>click</span></div>
+    </div>
+
+    <div class="ztt-log" id="zttLog1">
+      <div class="ztt-log-empty">等待你的第一次触摸……</div>
+    </div>
+
+    <div class="ztt-btn-row">
+      <button class="ztt-btn ztt-ghost" id="zttClear1" type="button">清空日志与计数</button>
+    </div>
+
+    <div class="ztt-tip">
+      <b>你应该看到：</b>touchstart → 若干次 touchmove → touchend → 最后才是 click。
+      移动距离越大、速度越慢，touchmove 的次数越多——这就是“跟手”的原理：每一帧都会回调一次。
+    </div>
+  </div>
+
+  <div class="ztt-sec">
+    <div class="ztt-sec-head">
+      <span class="ztt-no">3</span>
+      <h2>观察记录表<small>格子可以直接点开填写（内容只在本页显示，刷新即清空）</small></h2>
+    </div>
+    <div class="ztt-scroll">
+      <table class="ztt-table">
+        <thead>
+          <tr>
+            <th>操作</th>
+            <th>事件出现顺序</th>
+            <th>touchmove 次数</th>
+            <th>click 是否出现</th>
+            <th>备注</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>单击</td>
+            <td contenteditable="true"></td>
+            <td contenteditable="true"></td>
+            <td contenteditable="true"></td>
+            <td contenteditable="true"></td>
+          </tr>
+          <tr>
+            <td>向上拖动 150px</td>
+            <td contenteditable="true"></td>
+            <td contenteditable="true"></td>
+            <td contenteditable="true"></td>
+            <td contenteditable="true"></td>
+          </tr>
+          <tr>
+            <td>向左快速滑</td>
+            <td contenteditable="true"></td>
+            <td contenteditable="true"></td>
+            <td contenteditable="true"></td>
+            <td contenteditable="true"></td>
+          </tr>
+          <tr>
+            <td>双指触摸（可选）</td>
+            <td contenteditable="true"></td>
+            <td contenteditable="true"></td>
+            <td contenteditable="true"></td>
+            <td contenteditable="true"></td>
+          </tr>
+          <tr>
+            <td>长按 1 秒后抬起</td>
+            <td contenteditable="true"></td>
+            <td contenteditable="true"></td>
+            <td contenteditable="true"></td>
+            <td contenteditable="true"></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="ztt-tip ztt-ok">
+      <b>记录要点：</b>touchmove 次数和“距离 ÷ 每帧位移”有关，也和手机刷新率有关（常见 60Hz，即约 16ms 一次）；同一台手机上，拖得越远、拖得越慢，次数越多，所以表里填“约数字段”即可。
+    </div>
+  </div>
+
+  <div class="ztt-sec">
+    <div class="ztt-sec-head">
+      <span class="ztt-no">4</span>
+      <h2>三个必答问题<small>验收就考这三句，能直接讲出来</small></h2>
+    </div>
+
+    <p class="ztt-txt"><b>① 一次拖动里 touchmove 大约触发多少次？和距离有什么关系？</b></p>
+    <div class="ztt-tip ztt-ok">
+      触摸移动期间浏览器<b>按帧回调</b>，不是按像素：60Hz 屏幕上大约每 16ms 一次。慢拖 150px 常见 20～40 次；快速甩动只有 5～15 次。
+      关系是：<b>距离越大、速度越慢，次数越多</b>；同样的距离快速滑，次数明显更少——所以判断翻页不能只看次数，要看<b>位移和速度</b>。
+    </div>
+
+    <p class="ztt-txt"><b>② click 出现在 touchend 之前还是之后？</b></p>
+    <div class="ztt-tip ztt-ok">
+      <b>之后。</b>顺序固定为 touchstart → touchmove… → touchend → click。
+      历史原因浏览器会把 click 延后最多约 300ms（等“是不是双击”），加了 <code>touch-action: manipulation</code> 或自己处理 touch 事件后，这段延迟才会被去掉。
+      如果 touch 逻辑里调用了 <code>preventDefault()</code>，这一次 click 就不会再补发。
+    </div>
+
+    <p class="ztt-txt"><b>③ 如果把 touchend 换成 touchcancel，会发生什么？</b></p>
+    <div class="ztt-tip ztt-bad">
+      touchcancel <b>只在被系统打断时</b>触发（来电、消息横幅、手势返回），正常抬手只触发 touchend。
+      所以只监听 touchcancel 的话：正常滑动<b>永远收不到结束信号</b>——起点不清、定时器不取消、翻页判断不执行，状态就“卡住”了。
+      正确做法是两个事件都监听，共用同一个清理/收尾函数：touchend 负责“正常收尾”，touchcancel 负责“异常清场”。
+    </div>
+  </div>
+
+  <div class="ztt-sec">
+    <div class="ztt-sec-head">
+      <span class="ztt-no">5</span>
+      <h2>加分项 · 轨迹草图<small>把日志里的坐标画成一条路径</small></h2>
+    </div>
+    <p class="ztt-txt">做法很简单：拖动的过程中，日志里的 <code>clientX / clientY</code> 就是手指相对可视区域的坐标。把它们按顺序点在一张方格纸上（或截图后用标注工具连起来），就能得到手指的真实路径。</p>
+    <ul class="ztt-check">
+      <li>竖着拖：点的分布是一条近似竖直的线，x 基本不变</li>
+      <li>斜着拖：x、y 同时变化，斜率就是拖动方向</li>
+      <li>快甩：点与点间距大（每帧跳得多）；慢拖：点密集</li>
+    </ul>
+    <div class="ztt-tip"><b>答辩可以补一句：</b>这就是“跟手”的物理含义——每帧拿到一个新坐标，把元素 translate 到那个位置，画面才跟着手指连续移动。</div>
+  </div>
+
+  <div class="ztt-sec">
+    <div class="ztt-sec-head">
+      <span class="ztt-no">!</span>
+      <h2>踩坑记录<small>本关实测遇到的一个坑</small></h2>
+    </div>
+    <p class="ztt-txt"><b>坑：</b>在探针区拖动时，整个页面跟着上下滚，日志断断续续、坐标跳变。<br>
+    <b>办法：</b>给探针容器加 <code>touch-action: none</code>，并配合 <code>user-select: none</code>、<code>-webkit-touch-callout: none</code>，让这块区域的手势完全归自己管；页面其他区域不加，所以照常可以上下滚动。</p>
+  </div>
+
+  <div class="ztt-back">
+    <a href="index.html">← 任务目录</a>
+    <a class="ztt-orange" href="task2.html">去任务二 →</a>
+  </div>
+
+  <footer>高级网页设计 · 朱婷婷（24002120525） · 2026-2027-1</footer>
+</div>
+
+<script src="js/ztt-task1.js"></script>
+</body>
+</html>

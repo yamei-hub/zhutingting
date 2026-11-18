@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<!--
+  作者：朱婷婷
+  建立时间：2026-11-18
+  使用大模型：DeepSeek-V4.1-Flash
+  功能名称：移动端触摸事件课堂实践 · 任务一二三四目录页
+-->
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="format-detection" content="telephone=no">
+<link rel="icon" href="data:,">
+<title>移动端触摸事件 · 任务一二三四 · 朱婷婷</title>
+<link rel="stylesheet" href="css/ztt-mobile.css">
+</head>
+<body>
+<div class="ztt-wrap">
+
+  <div class="ztt-nav">
+    <a href="../index.html">← 课堂实践目录</a>
+    <a href="../task1.html">Swiper 三任务</a>
+    <span class="ztt-nav-here">11.18 新任务 · 移动端</span>
+  </div>
+
+  <div class="ztt-head">
+    <span class="ztt-badge">M O B I L E · 触 摸 交 互</span>
+    <h1>按下 · 滑动 · 缩放<br><b>四个递进任务</b></h1>
+    <p>本目录按课程第 7 节「课堂实践任务」完整实现四关：<b>观察</b> → <b>手势实现</b> → <b>综合交互</b> → <b>设备能力 + 降级</b>。
+    所有页面请用手机打开，没有手机时用 Chrome DevTools 的设备模式（F12 → 手机图标）体验单指操作。
+    类名 / id / JS 变量统一 <code>ztt</code> 前缀（课程给的示例是 <code>wy_</code>，此处按本项目命名规则替换）。</p>
+  </div>
+
+  <div class="ztt-sec">
+    <div class="ztt-sec-head">
+      <span class="ztt-no">1</span>
+      <h2>手机页面必备三件套<small>每个任务页都已配好，答辩会问</small></h2>
+    </div>
+    <div class="ztt-tip">
+      <b>① viewport：</b>每个页面 <code>&lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt;</code>，不写会整体缩小。<br>
+      <b>② 去灰块：</b>全局 <code>-webkit-tap-highlight-color: transparent</code>，点按不再出现灰色方块。<br>
+      <b>③ touch-action：</b>只给“要自己接管手势”的那块容器加 <code>touch-action: none</code>（任务三）、<code>pan-y</code>（任务二），页面其他区域照常滚动。
+    </div>
+  </div>
+
+  <div class="ztt-sec">
+    <div class="ztt-sec-head">
+      <span class="ztt-no">2</span>
+      <h2>四个任务入口<small>建议按顺序做，任务一的观察结论会在任务二三四里反复用到</small></h2>
+    </div>
+
+    <div class="ztt-task-list">
+      <a class="ztt-task" href="task1.html">
+        <div class="ztt-task-top"><span class="ztt-star">★</span><h3>任务一 · 事件侦探</h3></div>
+        <p>在事件探针上做 5 种操作，记录 touchstart / touchmove / touchend / click 的真实顺序，回答三个必答问题。维度：观察 · 记录 · 不写业务代码。</p>
+        <span class="ztt-task-file">task1.html</span>
+      </a>
+
+      <a class="ztt-task" href="task2.html">
+        <div class="ztt-task-top"><span class="ztt-star">★★</span><h3>任务二 · 手势卡片</h3></div>
+        <p>中华美食卡片 4 道菜，左右滑动切换，阈值 40px、冷却 300ms、0.3s 过渡、边界提示，纵向仍可滚动。维度：手势识别 · DOM 操作。</p>
+        <span class="ztt-task-file">task2.html</span>
+      </a>
+
+      <a class="ztt-task" href="task3.html">
+        <div class="ztt-task-top"><span class="ztt-star">★★★</span><h3>任务三 · 图片查看器</h3></div>
+        <p>双指缩放 1x～4x（以两指中点为基准不跳）、双击 1x/2x 切换、放大后单指拖动、缩回 1x 自动居中，旋转屏幕不丢状态。含演示视频位。</p>
+        <span class="ztt-task-file">task3.html</span>
+      </a>
+
+      <a class="ztt-task" href="task4.html">
+        <div class="ztt-task-top"><span class="ztt-star">★★★★</span><h3>任务四 · 摇一摇彩蛋</h3></div>
+        <p>devicemotion 合成加速度超阈值 14 触发“摇出今日菜谱”，1.5s 冷却；另附 B 方案倾斜视差（deviceorientation）。iOS 授权、无传感器降级为“点我抽一次”。含演示视频位。</p>
+        <span class="ztt-task-file">task4.html</span>
+      </a>
+    </div>
+
+    <div class="ztt-tip">
+      <b>关于演示视频：</b>任务三、任务四页面里已经留好 <code>videos/task3.mp4</code>、<code>videos/task4.mp4</code> 的播放位。
+      自己录屏后，把文件按这两个名字放进本目录下的 <code>videos</code> 文件夹即可自动播放，无需改代码。
+    </div>
+  </div>
+
+  <div class="ztt-sec">
+    <div class="ztt-sec-head">
+      <span class="ztt-no">3</span>
+      <h2>提交要求对照<small>课程第 7 节末尾的四项</small></h2>
+    </div>
+    <ul class="ztt-check">
+      <li>4 个任务按星级选做，至少完成 ★★ 两关（本目录四关已全部实现）</li>
+      <li>运行截图：手机真机截图，或 DevTools 设备模式截图</li>
+      <li>遇到的一个坑与解决办法：各任务页底部「踩坑记录」已写好</li>
+      <li>本次使用的 AI 提示词记录：已追加到 <code>../提示词.html</code></li>
+    </ul>
+  </div>
+
+  <div class="ztt-sec">
+    <div class="ztt-sec-head">
+      <span class="ztt-no">★</span>
+      <h2>命名与文件说明<small>答辩时被问“为什么不是 wy_”直接看这里</small></h2>
+    </div>
+    <p class="ztt-txt">课程示例统一用 <code>wy_</code> 前缀，本项目 <b>AGENTS.md</b> 规定所有类名、id、JS 变量以 <code>ztt</code> 开头，二者冲突时以项目规则为准，所以本目录下所有代码用 <code>ztt-</code>（类名）/ <code>ztt_</code>（变量）。功能、参数、验收点与课程要求一一对应。</p>
+    <p class="ztt-txt">目录结构：<code>index.html</code>、<code>task1.html</code>～<code>task4.html</code>、<code>css/ztt-mobile.css</code>、<code>js/ztt-task1.js</code>～<code>js/ztt-task4.js</code>、<code>imgs/</code>（任务三查看器用的三视图）、<code>videos/</code>（自录演示视频）。全部本地文件，不引外链。</p>
+  </div>
+
+  <div class="ztt-back">
+    <a href="../index.html">← 课堂实践目录</a>
+    <a class="ztt-orange" href="task1.html">从任务一开始 →</a>
+  </div>
+
+  <footer>高级网页设计 · 朱婷婷（24002120525） · 2026-2027-1</footer>
+</div>
+</body>
+</html>

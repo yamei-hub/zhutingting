@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<!--
+  作者：朱婷婷
+  建立时间：2026-11-18
+  使用大模型：DeepSeek-V4.1-Flash
+  功能名称：任务二 · 手势卡片：中华美食卡片左右滑动切换（阈值 + 冷却 + 过渡 + 边界提示）
+-->
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="format-detection" content="telephone=no">
+<link rel="icon" href="data:,">
+<title>任务二 · 手势卡片 · 朱婷婷</title>
+<link rel="stylesheet" href="css/ztt-mobile.css">
+</head>
+<body>
+<div class="ztt-wrap">
+
+  <div class="ztt-nav">
+    <a href="index.html">← 任务目录</a>
+    <a href="task1.html">← 任务一</a>
+    <span class="ztt-nav-here">任务二 · 手势卡片</span>
+  </div>
+
+  <div class="ztt-head">
+    <span class="ztt-badge">任 务 二 · ★★ 手 势 识 别</span>
+    <h1>中华美食卡片<br><b>左右滑动切换</b></h1>
+    <p>4 道菜，左滑下一张、右滑上一张。核心只有三步：<b>记起点 → 算差值 → 比较绝对值</b>。
+    阈值 40px 防误触，300ms 冷却防连跳，切换带 0.3s 过渡，边界给出提示文字。</p>
+  </div>
+
+  <div class="ztt-sec">
+    <div class="ztt-sec-head">
+      <span class="ztt-no">1</span>
+      <h2>滑动卡片<small>手机用手指左右滑；电脑上可点“上一张 / 下一张”</small></h2>
+    </div>
+
+    <div class="ztt-card-stage" id="zttStage2">
+      <div class="ztt-track" id="zttTrack2">
+        <article class="ztt-card ztt-g1">
+          <div>
+            <div class="ztt-card-no">01 / 04</div>
+            <h3>宫保鸡丁</h3>
+            <span class="ztt-card-tag">川菜 · 糊辣荔枝口</span>
+            <p>鸡丁滑嫩、花生酥脆，糊辣香里带一点“荔枝口”（酸甜）。红而不辣、辣而不猛，是最能代表川菜性格的一道家常菜。</p>
+          </div>
+          <div class="ztt-card-foot">向左滑 → 看下一道</div>
+        </article>
+
+        <article class="ztt-card ztt-g2">
+          <div>
+            <div class="ztt-card-no">02 / 04</div>
+            <h3>西湖醋鱼</h3>
+            <span class="ztt-card-tag">浙菜 · 酸甜清爽</span>
+            <p>草鱼汆熟后浇上糖醋汁，鱼肉细嫩、酸甜清爽。讲究“不用油煎”，全靠火候与芡汁取胜，是杭州楼外楼的招牌菜。</p>
+          </div>
+          <div class="ztt-card-foot">← 向右滑回上一道　向左滑 →</div>
+        </article>
+
+        <article class="ztt-card ztt-g3">
+          <div>
+            <div class="ztt-card-no">03 / 04</div>
+            <h3>兰州牛肉面</h3>
+            <span class="ztt-card-tag">西北面食 · 一清二白三红四绿五黄</span>
+            <p>汤清、萝卜白、辣子红、蒜苗绿、面条黄亮。手工拉面分毛细、二细、韭叶等九种粗细，出锅前现拉现煮。</p>
+          </div>
+          <div class="ztt-card-foot">← 向右滑回上一道　向左滑 →</div>
+        </article>
+
+        <article class="ztt-card ztt-g4">
+          <div>
+            <div class="ztt-card-no">04 / 04</div>
+            <h3>广式虾饺</h3>
+            <span class="ztt-card-tag">粤菜 · 早茶四大天王</span>
+            <p>澄面做皮、鲜虾做馅，皮薄透亮、折纹十二道以上。一笼三只，配一壶普洱，就是广式早茶最经典的开场。</p>
+          </div>
+          <div class="ztt-card-foot">← 向右滑回上一道</div>
+        </article>
+      </div>
+    </div>
+
+    <div class="ztt-dots" id="zttDots2"></div>
+
+    <div class="ztt-card-bar">
+      <span id="zttPage2">第 1 / 4 张</span>
+      <span class="ztt-btn-row" style="margin:0">
+        <button class="ztt-btn ztt-ghost" id="zttPrev2" type="button">上一张</button>
+        <button class="ztt-btn" id="zttNext2" type="button">下一张</button>
+      </span>
+    </div>
+
+    <div class="ztt-hint" id="zttHint2"></div>
+
+    <div class="ztt-tip">
+      <b>验收要点：</b>短距离误触（小于 40px）不会切换；快速连续滑动不会一次跳两张（300ms 冷却）；手机拖动卡片时页面不会跟着上下滚（<code>touch-action: pan-y</code>，纵向仍交给浏览器，所以页面照常能上下滚）。
+    </div>
+  </div>
+
+  <div class="ztt-sec">
+    <div class="ztt-sec-head">
+      <span class="ztt-no">2</span>
+      <h2>关键参数与写法<small>答辩按这张表讲</small></h2>
+    </div>
+    <div class="ztt-scroll">
+      <table class="ztt-table">
+        <thead>
+          <tr><th>位置</th><th>写法</th><th>为什么</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>起点</td>
+            <td><code>touchstart</code> 里存 <code>e.touches[0].clientX / clientY</code></td>
+            <td>touches 表示“当前在屏幕上的手指”，按下时取第一根即可</td>
+          </tr>
+          <tr>
+            <td>终点</td>
+            <td><code>touchend</code> 里用 <code>e.changedTouches[0]</code></td>
+            <td>抬手瞬间这根手指已从 touches 移除，用它才能拿到“刚离开的那根”</td>
+          </tr>
+          <tr>
+            <td>阈值</td>
+            <td>横向位移绝对值 &lt; 40px 视为误触</td>
+            <td>手指按下几乎不可能完全不动，几个像素抖动不能算滑动</td>
+          </tr>
+          <tr>
+            <td>方向</td>
+            <td>先比 <code>|dx|</code> 与 <code>|dy|</code>，取主方向；<code>dx&lt;0</code> 左滑下一张、<code>dx&gt;0</code> 右滑上一张</td>
+            <td>谁大听谁的，避免斜着滑时方向判断混乱；纵向为主时交给页面滚动</td>
+          </tr>
+          <tr>
+            <td>冷却</td>
+            <td>切换后 <code>ztt_locked = true</code>，300ms 后解锁，再与过渡时长对齐</td>
+            <td>快速连滑时，第二次 touchstart 发生在动画途中，不加锁会一次跳两张</td>
+          </tr>
+          <tr>
+            <td>过渡</td>
+            <td>轨道 <code>transition: transform .3s ease</code>，按 <code>-index * 100%</code> 平移</td>
+            <td>4 张卡片排成一条轨道，切页只是平移轨道，动画天然连续、不会闪</td>
+          </tr>
+          <tr>
+            <td>滚动</td>
+            <td>卡片容器 <code>touch-action: pan-y</code></td>
+            <td>横向手势归自己，纵向仍由浏览器滚动页面</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="ztt-sec">
+    <div class="ztt-sec-head">
+      <span class="ztt-no">3</span>
+      <h2>验收自检<small>逐条在手机上过一遍</small></h2>
+    </div>
+    <ul class="ztt-check">
+      <li>轻点卡片、短距离滑动（&lt;40px）不切换，卡片不动</li>
+      <li>快速连续左滑两次，只前进一张（冷却 300ms 生效）</li>
+      <li>拖动卡片时页面不上下滚；在卡片外上下滑，页面照常滚动</li>
+      <li>滑到第 1 张继续右滑，出现“已经是第一张了”</li>
+      <li>滑到第 4 张继续左滑，出现“已经是最后一张了”</li>
+      <li>页码“第 x / 4 张”与圆点高亮同步变化</li>
+    </ul>
+  </div>
+
+  <div class="ztt-sec">
+    <div class="ztt-sec-head">
+      <span class="ztt-no">!</span>
+      <h2>踩坑记录<small>本关遇到的两个问题</small></h2>
+    </div>
+    <p class="ztt-txt"><b>坑 1：</b>“第 1 张再往前滑”页面直接卡住不动，也没有提示。<br>
+    <b>办法：</b>边界不是“不处理”，而是“不切换但给提示”——统一走 <code>ztt_step(dir)</code>，越界时只更新提示文字并让提示 1.2s 后淡出。</p>
+    <p class="ztt-txt"><b>坑 2：</b>连续快速左滑，一次越过两张，页码和圆点还对不上。<br>
+    <b>办法：</b>加 300ms 冷却锁，并且平移轨道的换算只依赖 <code>ztt_index</code> 一个变量（<code>-index * 100%</code>），这样页码、圆点、位移三者永远同步。</p>
+  </div>
+
+  <div class="ztt-back">
+    <a href="task1.html">← 任务一</a>
+    <a class="ztt-orange" href="task3.html">去任务三 →</a>
+  </div>
+
+  <footer>高级网页设计 · 朱婷婷（24002120525） · 2026-2027-1</footer>
+</div>
+
+<script src="js/ztt-task2.js"></script>
+</body>
+</html>

@@ -206,7 +206,104 @@
   <footer>任务二 · creative 仿写 · 大国重器光影展 · 高级网页设计 · 朱婷婷（24002120525） · 2026-2027-1</footer>
 </div>
 
-<!-- 任务二脚本已外置，变量统一 ztt_ 前缀 -->
-<script src="js/ztt-task2.js"></script>
+<script>
+  // ══════════════════════════════════════════════════════════
+  //  任务二作答区 · 作者：朱婷婷（24002120525），变量 ztt_ 前缀
+  // ══════════════════════════════════════════════════════════
+
+  // 函数功能：根据传入的 effect 类型，返回完整的 Swiper 配置对象
+  // 参数 ztt_effect：字符串，可选值 slide / fade / cube / coverflow / flip / cards / creative
+  // 返回值：可直接传给 new Swiper() 的 options 对象
+  function ztt_getOptions(ztt_effect){
+    // 基础配置：所有 effect 共用，先写一份默认值
+    var ztt_opt = {
+      loop: true,          // 循环轮播：到最后一张再切回第一张
+      speed: 800,          // 翻页动画时长，单位毫秒（越大越慢）
+      autoplay: { delay: 3200, disableOnInteraction: false }, // 自动播放：每张停 3.2 秒，用户拖动后不停止
+      pagination: { el: '#zttPag', clickable: true },          // 底部圆点分页器，点击可跳
+      keyboard: { enabled: true, onlyInViewport: true }        // 方向键 ← → 翻页；视口外时不响应
+    };
+
+    // 根据 effect 类型，在基础配置上叠加各自的专属参数
+    switch(ztt_effect){
+      case 'fade':                    // fade 淡入淡出效果
+        ztt_opt.effect = 'fade';
+        ztt_opt.fadeEffect = { crossFade: true }; // 交叉淡入：上一张淡出同时下一张淡入
+        break;
+
+      case 'cube':                    // cube 立方体翻转效果
+        ztt_opt.effect = 'cube';
+        ztt_opt.cubeEffect = { shadow: true, slideShadows: true }; // 立方体背面投影，增强立体感
+        break;
+
+      case 'coverflow':               // coverflow 封面流效果
+        ztt_opt.effect = 'coverflow';
+        ztt_opt.coverflowEffect = {
+          rotate: 45,                 // 两侧卡片旋转 45°
+          stretch: 0,                 // 卡片之间不拉伸
+          depth: 180,                 // 纵深距离（像素）
+          modifier: 1,                // 效果倍数（1 = 原始强度）
+          slideShadows: true          // 卡片投影
+        };
+        break;
+
+      case 'flip':                    // flip 3D 翻转效果
+        ztt_opt.effect = 'flip';
+        ztt_opt.flipEffect = { slideShadows: true };
+        break;
+
+      case 'cards':                   // cards 卡片堆叠效果
+        ztt_opt.effect = 'cards';
+        ztt_opt.cardsEffect = {
+          slideShadows: true,
+          rotate: true,
+          perSlideRotate: 8,          // 每张卡片错开旋转 8°
+          perSlideOffset: 10          // 每张卡片错开 10px
+        };
+        break;
+
+      case 'creative':                // ★ creative 自定义变换（本课重点，电影选片墙效果）
+        ztt_opt.effect = 'creative';
+        ztt_opt.creativeEffect = {
+          limitProgress: 1,           // 只给当前张相邻的 1 张做变换，远的不叠加
+          shadowPerProgress: true,    // 阴影透明度跟随滑动进度渐变，叠出海报墙层次感
+          prev: {                     // prev 定义"离开中心的上一张"的最终姿态
+            translate: ['-85%', 0, -320], // 水平左移自身宽的 85%；垂直不动；Z 轴向屏幕里退 320px
+            rotate: [0, 0, -12],           // 绕 Z 轴逆时针转 12°（左倾）
+            scale: 0.7,                    // 缩小到 70%
+            opacity: 0.55,                 // 半透明，弱化到背景层
+            shadow: true                   // 开启投影（配合 shadowPerProgress）
+          },
+          next: {                     // next 定义"即将进场的下一张"在进场前的初始姿态
+            translate: ['85%', 0, 320],   // 水平右移自身宽的 85%；Z 轴向屏幕外迎 320px
+            rotate: [0, 0, 12],           // 绕 Z 轴顺时针转 12°（右倾）
+            scale: 1.05,                  // 略微放大到 1.05 倍
+            opacity: 0.55,                // 进场前半透明，靠近中心再变实
+            shadow: true                   // 同上
+          }
+        };
+        break;
+
+      default:                        // 默认 slide 水平滑动
+        ztt_opt.effect = 'slide';
+    }
+
+    return ztt_opt; // 返回组装好的完整配置对象
+  }
+
+  // 创建主舞台 Swiper 实例，初始化默认效果为 creative 电影选片墙
+  var ztt_sw = new Swiper('#zttCreative', ztt_getOptions('creative'));
+
+  // 遍历所有效果按钮，逐个绑定点击事件
+  document.querySelectorAll('#zttFx button').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      var fx = btn.getAttribute('data-fx');     // 读取按钮上的 data-fx 属性，得到目标 effect 名
+      document.querySelectorAll('#zttFx button').forEach(function(b){ b.classList.remove('ztt-on'); }); // 先把所有按钮的高亮类去掉
+      btn.classList.add('ztt-on');             // 给当前点击的按钮加上高亮类
+      ztt_sw.destroy(true, true);              // 销毁旧实例（参数 true true 表示释放事件 + 清空节点数据）
+      ztt_sw = new Swiper('#zttCreative', ztt_getOptions(fx)); // 用新 effect 重建实例
+    });
+  });
+</script>
 </body>
 </html>

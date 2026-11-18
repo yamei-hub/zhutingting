@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<!--
+  作者：朱婷婷
+  建立时间：2026-11-18
+  使用大模型：DeepSeek-V4.1-Flash
+  功能名称：任务四 · 摇一摇彩蛋：devicemotion 摇动检测 + 1.5s 冷却 + iOS 权限 + 无传感器降级
+-->
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="format-detection" content="telephone=no">
+<link rel="icon" href="data:,">
+<title>任务四 · 摇一摇彩蛋 · 朱婷婷</title>
+<link rel="stylesheet" href="css/ztt-mobile.css">
+</head>
+<body>
+<div class="ztt-wrap">
+
+  <div class="ztt-nav">
+    <a href="index.html">← 任务目录</a>
+    <a href="task3.html">← 任务三</a>
+    <span class="ztt-nav-here">任务四 · 摇一摇彩蛋</span>
+  </div>
+
+  <div class="ztt-head">
+    <span class="ztt-badge">任 务 四 · ★★★★ 设 备 能 力</span>
+    <h1>摇一摇手机<br><b>摇出今日菜谱</b></h1>
+    <p>监听 <code>devicemotion</code>，用 <code>accelerationIncludingGravity</code> 算合成加速度，超过阈值 14 判定为摇动（较课程建议的 18 更灵敏），
+    触发后进入 1.5 秒冷却；下面还附了 B 方案「倾斜视差」（<code>deviceorientation</code>）。
+    iOS 13+ 需要按钮授权；没有传感器的设备降级为“点我抽一次”，不报错、不白屏。</p>
+  </div>
+
+  <div class="ztt-sec">
+    <div class="ztt-sec-head">
+      <span class="ztt-no">1</span>
+      <h2>摇一摇<small>手机真机体验最好；电脑上点“点我抽一次”即可</small></h2>
+    </div>
+
+    <div class="ztt-sensor-box" id="zttSensorBox4">
+      <div class="ztt-phone">S H A K E · 摇 一 摇</div>
+      <h3>摇一摇手机</h3>
+      <p id="zttStatus4">抽今日菜谱</p>
+    </div>
+
+    <div class="ztt-readout" id="zttReadout4">合成加速度：等待传感器数据……</div>
+
+    <div class="ztt-btn-row">
+      <button class="ztt-btn ztt-orange" id="zttPermit4" type="button" style="display:none">开启传感器权限（iOS）</button>
+      <button class="ztt-btn ztt-ghost" id="zttFallback4" type="button">点我抽一次（降级）</button>
+    </div>
+
+    <div class="ztt-result" id="zttResult4">
+      <div class="ztt-dish-tag" id="zttDishTag4">今日菜谱</div>
+      <div class="ztt-dish-name" id="zttDishName4">—</div>
+      <p id="zttDishDesc4"></p>
+    </div>
+
+    <div class="ztt-tip">
+      <b>一次摇动只出一次结果：</b>触发后立刻上锁 1.5 秒，摇动过程中连续几十帧超过阈值也只会抽一次，冷却结束才接受下一次摇动。
+    </div>
+
+    <div class="ztt-tip ztt-bad">
+      <b>iPhone 注意：</b>iOS 只允许在 <b>https</b> 页面读取加速度传感器。用 <code>http://局域网IP</code> 或直接双击 html 打开时，点“开启传感器权限”也拿不到数据——
+      请改用 https 链接打开（例如把本文件夹拖到 Netlify Drop 部署），或直接用“点我抽一次”完成降级验收。
+    </div>
+  </div>
+
+  <div class="ztt-sec">
+    <div class="ztt-sec-head">
+      <span class="ztt-no">2</span>
+      <h2>倾斜视差（B 方案）<small>左右 / 前后倾斜手机，三层画面按不同幅度位移</small></h2>
+    </div>
+
+    <div class="ztt-tilt" id="zttTiltBox4">
+      <div class="ztt-tilt-layer ztt-tilt-bg" data-depth="10"></div>
+      <div class="ztt-tilt-layer ztt-tilt-img" data-depth="22"></div>
+      <div class="ztt-tilt-layer ztt-tilt-front" data-depth="36">
+        <div class="ztt-tilt-card">宫保鸡丁 · 今日推荐</div>
+      </div>
+      <span class="ztt-tilt-tag">deviceorientation · β / γ</span>
+    </div>
+
+    <div class="ztt-readout" id="zttTiltReadout4">γ 横滚：—　β 前后：—</div>
+
+    <div class="ztt-tip" id="zttTiltTip4">
+      左右倾斜看横向视差、前后倾斜看纵向视差，三层深度不同（10 / 22 / 36px），近层动得多、远层动得少。
+      电脑上没有陀螺仪时，把鼠标移到框内也能预览同样的效果。
+    </div>
+  </div>
+
+  <div class="ztt-sec">
+    <div class="ztt-sec-head">
+      <span class="ztt-no">3</span>
+      <h2>关键参数与概念<small>答辩重点在“两个 acceleration 的区别”</small></h2>
+    </div>
+    <div class="ztt-scroll">
+      <table class="ztt-table">
+        <thead>
+          <tr><th>项目</th><th>取值 / 做法</th><th>说明</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>监听事件</td>
+            <td><code>window.addEventListener('devicemotion', ...)</code></td>
+            <td>加速度变化时持续回调，频率随设备而定</td>
+          </tr>
+          <tr>
+            <td>取数据</td>
+            <td><code>e.accelerationIncludingGravity</code></td>
+            <td>包含重力的加速度，静止时 Z 轴约 9.8，摇动时叠加手部加速度</td>
+          </tr>
+          <tr>
+            <td>合成加速度</td>
+            <td><code>Math.hypot(x, y, z)</code></td>
+            <td>三轴合成为一个标量，只看“总力度”，不用管手机朝向</td>
+          </tr>
+          <tr>
+            <td>阈值</td>
+            <td>14（静止基线 9.8，约多出 0.4g 即触发；另加“相邻帧变化 &gt;6”辅助判断）</td>
+            <td>课程例子给的是 18，实测偏迟钝；改为 14 并补一个突变判断，轻轻一甩也能触发</td>
+          </tr>
+          <tr>
+            <td>冷却</td>
+            <td>触发后上锁 1.5s，之后解锁</td>
+            <td>一次摇动会连续触发十几帧超阈值，不加冷却会连抽多次</td>
+          </tr>
+          <tr>
+            <td>iOS 权限</td>
+            <td><code>DeviceMotionEvent.requestPermission()</code></td>
+            <td>iOS 13+ 必须由用户点击触发授权；本页用按钮完成这一步</td>
+          </tr>
+          <tr>
+            <td>倾斜视差</td>
+            <td><code>deviceorientation</code> 的 <code>gamma</code>（左右）/ <code>beta</code>（前后）</td>
+            <td>按角度比例平移三层元素，depth 越大动得越多，形成远近层次</td>
+          </tr>
+          <tr>
+            <td>方向权限</td>
+            <td><code>DeviceOrientationEvent.requestPermission()</code></td>
+            <td>iOS 上与 devicemotion 分开授权，本页用同一个按钮依次申请</td>
+          </tr>
+          <tr>
+            <td>降级</td>
+            <td>1.5s 内没收到数据 → 提示“当前设备不支持” + “点我抽一次”</td>
+            <td>桌面浏览器、旧设备、未授权都可能没有数据，必须保证功能仍可用</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p class="ztt-txt"><b><code>accelerationIncludingGravity</code> 与 <code>acceleration</code> 的区别：</b></p>
+    <div class="ztt-tip ztt-ok">
+      <b>accelerationIncludingGravity</b> 把重力也算进去：手机平放静止时，Z 轴读数约 9.8，摇动时读数在 9.8 的基础上上下波动，几乎每台手机都能给值，适合做“摇一摇”。<br>
+      <b>acceleration</b> 是传感器去重力后的结果：静止时三轴都接近 0，只反映“额外加速度”，更适合计步、判断运动方向；但不少设备的这一项会返回 <code>null</code>。
+    </div>
+
+    <p class="ztt-txt"><b>为什么必须做降级？</b></p>
+    <div class="ztt-tip">
+      桌面浏览器没有加速度计，iOS 未授权、部分安卓旧机型也可能拿不到 <code>devicemotion</code> 数据。
+      如果代码只依赖传感器，这些情况下页面就是“一片空白、点了没反应”，属于典型扣分点。
+      所以本页：<b>能摇就摇</b>；<b>不能摇就点按钮抽</b>，两条路都能拿到结果。
+    </div>
+  </div>
+
+  <div class="ztt-sec">
+    <div class="ztt-sec-head">
+      <span class="ztt-no">▶</span>
+      <h2>演示视频<small>朱婷婷自录 · 手机真机验收录屏</small></h2>
+    </div>
+    <div class="ztt-video">
+      <video id="zttVideo4" controls playsinline preload="metadata" src="videos/task4.mp4"></video>
+      <div class="ztt-video-empty" id="zttVideoEmpty4">
+        <b>演示视频待插入</b>
+        <span>把手机录屏命名为 <code>task4.mp4</code>，放进本页同级的 <code>videos</code> 文件夹，刷新即可播放</span>
+      </div>
+    </div>
+    <p class="ztt-txt">视频内容：手机真机验收录屏 —— 摇一摇触发菜谱、冷却期间不重复、倾斜手机看视差、无传感器时点“点我抽一次”的降级过程。</p>
+  </div>
+
+  <div class="ztt-sec">
+    <div class="ztt-sec-head">
+      <span class="ztt-no">4</span>
+      <h2>验收自检<small>摇一摇 + 倾斜视差 两套都要过</small></h2>
+    </div>
+    <ul class="ztt-check">
+      <li>一次摇动只触发一次（连续读数超阈值也只抽一次）</li>
+      <li>轻轻摇一下也能触发（阈值 14 + 相邻帧突变判断）</li>
+      <li>倾斜手机时三层画面按不同幅度移动，读数同步显示 β / γ</li>
+      <li>电脑上鼠标移入视差框，同样能看到近层快、远层慢</li>
+      <li>没有加速度传感器的设备显示“当前设备不支持”，不报错不白屏</li>
+      <li>iOS 上通过按钮触发权限申请（且页面必须是 https 才会真正给数据）</li>
+      <li>能讲清 accelerationIncludingGravity 与 acceleration 的区别</li>
+      <li>结果出现时有弹出动画，冷却期间无重复结果</li>
+    </ul>
+  </div>
+
+  <div class="ztt-sec">
+    <div class="ztt-sec-head">
+      <span class="ztt-no">!</span>
+      <h2>踩坑记录<small>本关遇到的两个问题</small></h2>
+    </div>
+    <p class="ztt-txt"><b>坑 1：</b>摇一下手机，菜谱连着换了三四道，动画都在打架。<br>
+    <b>办法：</b>加 1.5s 冷却锁：触发时 <code>ztt_locked = true</code>，锁定期间所有超阈值读数直接忽略，<code>setTimeout</code> 到点才解锁。</p>
+    <p class="ztt-txt"><b>坑 2：</b>在电脑上打开，页面一直“等传感器数据”，看起来像坏了。<br>
+    <b>办法：</b>启动后 1.5s 内没收到任何 <code>devicemotion</code>，就把状态改成“当前设备不支持，请用手机打开”，并把“点我抽一次”作为正式入口展示出来。</p>
+  </div>
+
+  <div class="ztt-back">
+    <a href="task3.html">← 任务三</a>
+    <a class="ztt-orange" href="index.html">回到任务目录 →</a>
+  </div>
+
+  <footer>高级网页设计 · 朱婷婷（24002120525） · 2026-2027-1</footer>
+</div>
+
+<script src="js/ztt-task4.js"></script>
+</body>
+</html>
